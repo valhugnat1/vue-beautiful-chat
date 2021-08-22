@@ -70,7 +70,7 @@ export default {
   border: 1px solid;
   border-radius: 15px;
   font-size: 14px;
-  background: white;
+  background: red;
   cursor: pointer;
   border-color: white !important;
 }
