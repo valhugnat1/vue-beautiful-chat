@@ -29,7 +29,7 @@ export default {
           options: {
               rewind: true,
               gap   : '1rem',
-              fixedWidth: "340px",
+              fixedWidth: "370px",
               autoHeight: true
           },
       };
