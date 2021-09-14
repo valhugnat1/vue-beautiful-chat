@@ -23,7 +23,7 @@
         :showDeletion="showDeletion"
         @remove="$emit('remove')">
           <template v-slot:default="scopedProps">
-            <slot name="text-message-body" :message="scopedProps.message" :messageText="scopedProps.messageText" :messageColors="scopedProps.messageColors" :me="scopedProps.me">
+            <slot name="text-message-body" :message="scopedProps.message" :messageText="scopedProps.messageText" :messageColors="scopedProps.messageColors" :me="scopedProps.me"> 
             </slot>
           </template>
           <template v-slot:text-message-toolbox="scopedProps">
@@ -208,6 +208,7 @@ export default {
     }
   }
 }
+
 .sc-message--content.sent .sc-message--text {
   color: white;
   background-color: #4e8cff;
