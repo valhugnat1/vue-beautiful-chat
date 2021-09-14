@@ -30,6 +30,20 @@
       :showEdition="showEdition"
       :showDeletion="showDeletion"
       :messageStyling="messageStyling"
+
+      :showEmoji="showEmoji"
+      :showPhotos="showPhotos"
+      :showMap="showMap"
+      :showCredits="showCredits"
+      :showHelp="showHelp"
+      :showSend="showSend"
+      :onSubmit="onUserInputSubmit"
+      :suggestions="getSuggestions()"
+      :showFile="showFile"
+      :placeholder="placeholder"
+      @onType="$emit('onType')"
+      @edit="$emit('edit', $event)"
+
       @scrollToTop="$emit('scrollToTop')"
       @remove="$emit('remove', $event)"
     >
@@ -50,6 +64,7 @@
         </slot>
       </template>
     </MessageList>
+      
     <UserInput
       v-if="!showUserList"
       :showEmoji="showEmoji"
@@ -64,7 +79,8 @@
       :placeholder="placeholder"
       @onType="$emit('onType')"
       @edit="$emit('edit', $event)"
-      :colors="colors" />
+      :colors="colors" 
+      :onlyButton="false"/> 
   </div>
 </template>
 

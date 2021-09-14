@@ -26,15 +26,36 @@
       :messageStyling="messageStyling"
       :showEdition="showEdition"
       :showDeletion="showDeletion" />
+
+      
+    
+    <UserInput
+      v-if="!showUserList"
+      :showEmoji="showEmoji"
+      :showPhotos="showPhotos"
+      :showMap="showMap"
+      :showCredits="showCredits"
+      :showHelp="showHelp"
+      :showSend="showSend"
+      :onSubmit="onSubmit"
+      :suggestions="getSuggestions()"
+      :showFile="showFile"
+      :placeholder="placeholder"
+      @onType="$emit('onType')"
+      @edit="$emit('edit', $event)"
+      :colors="colors"
+      :onlyButton="true" />
   </div>
 </template>
 <script>
 import Message from './Message.vue'
+import UserInput from './UserInput.vue'
 import chatIcon from './assets/chat-icon.svg'
 
 export default {
   components: {
-    Message
+    Message,
+    UserInput
   },
   props: {
     participants: {
@@ -59,16 +80,48 @@ export default {
     },
     messageStyling: {
       type: Boolean,
-      required: true
+     required: true
     },
     showEdition: {
       type: Boolean,
       required: true
     },
-    showDeletion: {
+    showEmoji: {
       type: Boolean,
+      default: false
+    },
+    showPhotos: {
+      type: Boolean,
+      default: false
+    },
+    showMap: {
+      type: Boolean,
+      default: false
+    },
+    showCredits: {
+      type: Boolean,
+      default: false
+    },
+    showHelp: {
+      type: Boolean,
+      default: false
+    },
+    showSend: {
+      type: Boolean,
+      default: false
+    },
+    onSubmit: {
+      type: Function,
       required: true
-    }
+    },
+    showFile: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: 'Write a message...'
+    },
   },
   methods: {
     _scrollDown () {
@@ -87,6 +140,9 @@ export default {
 
       // A profile may not be found for system messages or messages by 'me'
       return profile || {imageUrl: '', name: ''}
+    },
+    getSuggestions(){
+      return this.messages.length > 0 ? this.messages[this.messages.length - 1].suggestions : []
     }
   },
   computed: {

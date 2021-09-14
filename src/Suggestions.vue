@@ -16,6 +16,9 @@
               {'color' : 'blue', 'height' : '24vh', 'background-image': 'url(' + suggestion.img + ')'} : 
               {'color' : 'green', 'height' : '30vh', 'background-image': 'url(' + suggestion.img + ')'} : 
               {'color' : 'white', 'height' : '40vh', 'background-image': 'url(' + suggestion.img + ')'}]" > </div>
+
+
+              
               
               <div style="text-align: center; line-height: 40px; font-size: 16px; color : #295ca3">{{suggestion.choice}}</div>
 
@@ -32,7 +35,7 @@
           </splide-slide>
         </splide>
         <button v-else class="sc-suggestions-element" v-for="(suggestion, idx) in suggestions" v-on:click="$emit('sendSuggestion', suggestion.choice)"
-        :style="{borderColor: colors.sentMessage.text, color: colors.sentMessage.text}" :key="idx">{{suggestion.choice}}</button>
+         :key="idx">{{suggestion.choice}}</button>
     </div>
 </template>
 
@@ -219,6 +222,7 @@ export default {
   background: white;
   cursor: pointer;
   border-color: white !important;
+  color : #295ca3;
 
 }
 

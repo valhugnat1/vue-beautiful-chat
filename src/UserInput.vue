@@ -1,12 +1,12 @@
 <template>
   <div>
-    <Suggestions v-if="suggestions" :suggestions="suggestions" v-on:sendSuggestion="_submitSuggestion" :colors="colors" />
-    <div v-if="file" class='file-container' :style="{backgroundColor: colors.userInput.text, color: colors.userInput.bg}">
+    <Suggestions v-if="suggestions && onlyButton" :suggestions="suggestions" v-on:sendSuggestion="_submitSuggestion" :colors="colors" />
+    <div v-if="file && onlyButton" class='file-container' :style="{backgroundColor: colors.userInput.text, color: colors.userInput.bg}" >
       <span class='icon-file-message'><img :src="icons.file.img"  :alt="icons.file.name" height="15" /></span>
       {{file.name}}
       <span class='delete-file-message' @click="cancelFile()"><img :src="icons.closeSvg.img" :alt="icons.closeSvg.name" height="10" title='Remove the file' /></span>
     </div>
-    <form class="sc-user-input" :class="{active: inputActive}" :style="{background: colors.userInput.bg}">
+    <form class="sc-user-input" :class="{active: inputActive}" :style="{background: colors.userInput.bg}" v-if="onlyButton == false">
       <div
         role="button"
         tabIndex="0"
@@ -146,6 +146,10 @@ export default {
     },
     colors: {
       type: Object,
+      required: true
+    },
+    onlyButton: {
+      type: Boolean,
       required: true
     }
   },
