@@ -163,24 +163,24 @@ export default {
     self = this
     console.log(this);
 
+    navigator.geolocation.getCurrentPosition(getDistance)
 
-
-      let myPromise = new Promise(function(myResolve, myReject) {
-        let recaptchaScript = document.createElement('script')
-        recaptchaScript.setAttribute('src', 'http://maps.google.com/maps/api/js?key=AIzaSyAlyjo2L7BKSLJ4EQGC_qIiIspkUo391aI')
-        document.head.appendChild(recaptchaScript)
-        myResolve();
-      });
-      
-      myPromise.then(
-        setTimeout(() => {
-            if (this.suggestions[0].apigoogle == "oui") {
-              navigator.geolocation.getCurrentPosition(getGoogleDistTemps)
-            } else {
-              navigator.geolocation.getCurrentPosition(getDistance)
-            }
-          }, 2000)
-      );
+    /*let myPromise = new Promise(function(myResolve, myReject) {
+      let recaptchaScript = document.createElement('script')
+      recaptchaScript.setAttribute('src', 'http://maps.google.com/maps/api/js?key=AIzaSyAlyjo2L7BKSLJ4EQGC_qIiIspkUo391aI')
+      document.head.appendChild(recaptchaScript)
+      myResolve();
+    });
+    
+    myPromise.then(
+      setTimeout(() => {
+          if (this.suggestions[0].apigoogle == "oui") {
+            navigator.geolocation.getCurrentPosition(getGoogleDistTemps)
+          } else {
+            navigator.geolocation.getCurrentPosition(getDistance)
+          }
+        }, 2000)
+    );*/
 
 
 
