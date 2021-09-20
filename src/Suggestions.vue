@@ -20,16 +20,16 @@
 
               
               
-              <div style="text-align: center; line-height: 40px; font-size: 16px;" :style="color : colors.sentMessage.text">{{suggestion.choice}}</div>
+              <div style="text-align: center; line-height: 40px; font-size: 16px;" :style="{color : colors.sentMessage.text}">{{suggestion.choice}}</div>
 
               <div style="margin-bottom: 0.5em; text-align: left; text-overflow: ellipsis; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; 
               padding: 0px 8px 0px 8px; height: 5.8em; color: #585858;" v-if="suggestion.description !== undefined"> 
               <span v-if="suggestion.localisation !== undefined"> {{distanceGoogle[idx]}} {{tempsGoogle[idx]}} <br/></span> {{suggestion.description}}</div> 
 
-              <div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="color : colors.sentMessage.text" v-on:click.stop.prevent="getGoogleAdress(suggestion)" 
+              <div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style=" {color : colors.sentMessage.text}" v-on:click.stop.prevent="getGoogleAdress(suggestion)" 
               v-if="suggestion.localisation !== undefined">Adresse 📍</div>
 
-              <a :href="`tel:${suggestion.telephone}`" style="text-decoration: none;"><div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="color : colors.sentMessage.text"
+              <a :href="`tel:${suggestion.telephone}`" style="text-decoration: none;"><div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="{color : colors.sentMessage.text}"
               v-on:click.stop.prevent="" v-if="suggestion.telephone !== undefined">☎️ {{suggestion.telephone}}</div></a>
             </button>
           </splide-slide>
