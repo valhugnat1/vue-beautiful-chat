@@ -80,6 +80,7 @@
       @onType="$emit('onType')"
       @edit="$emit('edit', $event)"
       :colors="colors" 
+      :mapSetting="mapSetting"
       :onlyButton="false"/> 
   </div>
 </template>
@@ -171,6 +172,10 @@ export default {
       required: true
     },
     colors: {
+      type: Object,
+      required: true
+    },
+    mapSetting : {
       type: Object,
       required: true
     },

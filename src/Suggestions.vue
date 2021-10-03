@@ -6,30 +6,31 @@
         >
           <splide-slide v-for="(suggestion, idx) in suggestions" :key="suggestion.id" v-if="(currentHour >= suggestion.heureDebut && currentHour <= suggestion.heureFin) || suggestion.heureDebut === undefined || suggestion.heureFin === undefined" >
             <button v-bind:class="{ 'sc-suggestions-element-carrousel': suggestion.img !== undefined, 'sc-suggestions-element': suggestion.img === undefined }"  v-on:click="$emit('sendSuggestion', suggestion.choice)"
-            :style="{borderColor: colors.sentMessage.text, color: colors.sentMessage.text}" :key="idx">
+            :style="[colors.carrousel !== undefined ? {'borderColor': colors.sentMessage.text, 'color': colors.sentMessage.text, 'background': colors.carrousel.bg} : 
+            {'borderColor': colors.sentMessage.text, 'color': colors.sentMessage.text, 'background': 'white'} ]" :key="idx">
 
               <div class="sc-suggestions-element-img" 
               :style="[suggestion.description !== undefined ? 
               suggestion.telephone !== suggestion.localisation ? 
               suggestion.localisation !== undefined && suggestion.telephone !== undefined ? 
-              {'color' : 'red', 'height' : '18vh', 'background-image': 'url(' + suggestion.img + ')'} : 
-              {'color' : 'blue', 'height' : '24vh', 'background-image': 'url(' + suggestion.img + ')'} : 
-              {'color' : 'green', 'height' : '30vh', 'background-image': 'url(' + suggestion.img + ')'} : 
-              {'color' : 'white', 'height' : '40vh', 'background-image': 'url(' + suggestion.img + ')'}]" > </div>
+              {'height' : setHeightImg('18vh'), 'background-image': 'url(' + suggestion.img + ')'} : 
+              {'height' : setHeightImg('24vh'), 'background-image': 'url(' + suggestion.img + ')'} : 
+              {'height' : setHeightImg('30vh'), 'background-image': 'url(' + suggestion.img + ')'} : 
+              {'height' : setHeightImg('40vh'), 'background-image': 'url(' + suggestion.img + ')'}]" > </div>
 
 
               
               
-              <div style="text-align: center; line-height: 40px; font-size: 16px;" :style="{color : colors.sentMessage.text}">{{suggestion.choice}}</div>
+              <div style="text-align: center; line-height: 40px; font-size: 16px;" :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]">{{suggestion.choice}}</div>
 
               <div style="margin-bottom: 0.5em; text-align: left; text-overflow: ellipsis; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; 
-              padding: 0px 8px 0px 8px; height: 5.8em; color: #585858;" v-if="suggestion.description !== undefined"> 
+              padding: 0px 8px 0px 8px; height: 5.8em; " :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.textBody} : {'color': 'black'}]" v-if="suggestion.description !== undefined"> 
               <span v-if="suggestion.localisation !== undefined"> {{distanceGoogle[idx]}} {{tempsGoogle[idx]}} <br/></span> {{suggestion.description}}</div> 
 
-              <div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style=" {color : colors.sentMessage.text}" v-on:click.stop.prevent="getGoogleAdress(suggestion)" 
+              <div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]" v-on:click.stop.prevent="getGoogleAdress(suggestion)" 
               v-if="suggestion.localisation !== undefined">Adresse 📍</div>
 
-              <a :href="`tel:${suggestion.telephone}`" style="text-decoration: none;"><div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="{color : colors.sentMessage.text}"
+              <a :href="`tel:${suggestion.telephone}`" style="text-decoration: none;"><div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]"
               v-on:click.stop.prevent="" v-if="suggestion.telephone !== undefined">☎️ {{suggestion.telephone}}</div></a>
             </button>
           </splide-slide>
@@ -84,6 +85,8 @@ export default {
     }
   },
   mounted() {
+
+    console.log("colors", this.colors)
 
     function getGoogleDistTemps(position) {
 
@@ -187,6 +190,23 @@ export default {
     
   },
   methods: {
+    setHeightImg : function (heightImgBase) {
+      if (window.innerWidth > 450) 
+      {
+        console.log(heightImgBase)
+        if ('18vh' == heightImgBase) {
+          return "100px"
+        } else if ('24vh' == heightImgBase) {
+          return "140px"
+        } else if ('30vh' == heightImgBase) {
+          return "160px"
+        } else if ('40vh' == heightImgBase) {
+          return "230px"
+        }
+      } else {
+        return heightImgBase
+      }
+    },
     getGoogleAdress : function (suggestion) {
 
       function success(pos) {
@@ -202,6 +222,16 @@ export default {
       window.open(url, '_blank');
 
       navigator.geolocation.getCurrentPosition(success, error)
+    }
+  }, create() {
+    if (typeof this.colors.carrousel !== 'undefined') {
+      this.colors.carrousel.bg = "white"
+      this.colors.carrousel.title = "#295ca3"
+      this.colors.carrousel.textBody = "black"
+
+      console.log(this.colors.carrousel)
+    } else {
+      console.log("Set default valor")
     }
   }
 }

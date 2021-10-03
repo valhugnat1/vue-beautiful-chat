@@ -1,5 +1,6 @@
 <template>
   <div>
+    <MapSelec v-if="mapShow" v-on:sendSuggestion="_submitSuggestion" :mapSetting="mapSetting" :colors="colors" :suggestions="suggestions" />
     <Suggestions v-if="suggestions && onlyButton" :suggestions="suggestions" v-on:sendSuggestion="_submitSuggestion" :colors="colors" />
     <div v-if="file && onlyButton" class='file-container' :style="{backgroundColor: colors.userInput.text, color: colors.userInput.bg}" >
       <span class='icon-file-message'><img :src="icons.file.img"  :alt="icons.file.name" height="15" /></span>
@@ -54,6 +55,9 @@
             <icon-send />
           </user-input-button>
         </div>
+        <button v-if="mapSetting.exist" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
+          <img class="img-indicator-map" src="artybot/local.svg" />
+        </button>
       </div>
     </form>
   </div>
@@ -71,6 +75,7 @@ import store from "./store/"
 import IconCross from "./components/icons/IconCross.vue";
 import IconOk from "./components/icons/IconOk.vue";
 import IconSend from "./components/icons/IconSend.vue";
+import MapSelec from "./MapSelec.vue"
 
 
 export default {
@@ -81,7 +86,8 @@ export default {
     Suggestions,
     IconCross,
     IconOk,
-    IconSend
+    IconSend,
+    MapSelec
   },
   props: {
     icons:{
@@ -148,8 +154,16 @@ export default {
       type: Object,
       required: true
     },
+    mapSetting : {
+      type: Object,
+      required: true
+    },
     onlyButton: {
       type: Boolean,
+      required: true
+    },
+    messages: {
+      type: Array,
       required: true
     }
   },
@@ -157,10 +171,26 @@ export default {
     return {
       file: null,
       inputActive: false,
-      store
+      store,
+      mapShow: false
     }
   },
   methods: {
+    modifStatutMap () {
+
+      if (this.mapShow)
+      {
+        this.mapShow = !this.mapShow // Cache la carte
+
+      } else {
+        this._showIndicator('!map') // Envoi le massage pour demander d'afficher la carte
+        setTimeout(() => {
+          this._submitSuggestion("ok") //Valide le message indiquand que la carte arrive 
+          this.mapShow = !this.mapShow // Affiche la carte
+        },400);
+      }
+
+    },
     cancelFile () {
       this.file = null
     },
@@ -191,6 +221,11 @@ export default {
       })
     },
     _submitSuggestion(suggestion) {
+      if (this.mapShow)
+      {
+        this.mapShow = !this.mapShow // Cache la carte
+
+      }
       this.onSubmit({author: 'me', type: 'text', data: { text: suggestion }})
     },
     _checkSubmitSuccess (success) {
@@ -263,7 +298,6 @@ export default {
       this.store.editMessage = null;
     },
     _showIndicator(indicatorName) {
-      console.log("Show ", indicatorName)
       this.onSubmit({author: 'me', type: 'raw', data: { text: indicatorName }})
     }
   },

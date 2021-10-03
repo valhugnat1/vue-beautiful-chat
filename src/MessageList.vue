@@ -44,7 +44,9 @@
       @onType="$emit('onType')"
       @edit="$emit('edit', $event)"
       :colors="colors"
-      :onlyButton="true" />
+      :mapSetting="mapSetting"
+      :onlyButton="true"
+      :messages="messages" />
   </div>
 </template>
 <script>
@@ -71,6 +73,10 @@ export default {
       required: true
     },
     colors: {
+      type: Object,
+      required: true
+    },
+    mapSetting: {
       type: Object,
       required: true
     },
@@ -126,6 +132,13 @@ export default {
   methods: {
     _scrollDown () {
       //this.$refs.scrollList.scrollTop = this.$refs.scrollList.scrollHeight
+      this.$refs.scrollList.scrollTop = this.$refs.scrollList.scrollTop+20
+      
+      /*
+      setTimeout(() => {
+        this.$refs.scrollList.scrollTop = this.$refs.scrollList.scrollTop+20
+      }, 100);
+      */
     },
     handleScroll (e) {
         if (e.target.scrollTop === 0) {

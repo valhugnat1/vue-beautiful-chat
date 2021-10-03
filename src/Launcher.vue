@@ -30,6 +30,7 @@
       :placeholder="placeholder"
       :showTypingIndicator="showTypingIndicator"
       :colors="colors"
+      :mapSetting="mapSetting"
       :alwaysScrollToBottom="alwaysScrollToBottom"
       :messageStyling="messageStyling"
       :disableUserListToggle="disableUserListToggle"
@@ -177,6 +178,10 @@ export default {
       type: String,
       default: () => ''
     },
+    mapSetting: {
+      type: Object,
+      required: true
+    },
     colors: {
       type: Object,
       required: false,
@@ -196,7 +201,11 @@ export default {
         && 'text' in c.receivedMessage
         && 'userInput' in c
         && 'bg' in c.userInput
-        && 'text' in c.userInput,
+        && 'text' in c.userInput
+        && 'carrousel' in c
+        && 'bg' in c.carrousel
+        && 'title' in c.carrousel
+        && 'textBody' in c.carrousel,
       default: function () {
         return {
           header: {
@@ -220,6 +229,11 @@ export default {
           userInput: {
             bg: '#f4f7f9',
             text: '#565867'
+          },
+          userInput: {
+            bg: "white",
+            title: "#295ca3",
+            textBody: "black"
           }
         }
       }
