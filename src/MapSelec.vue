@@ -273,8 +273,14 @@ export default {
       var tailleCadre = Math.round(window.innerWidth*0.9);
       if (tailleCadre > 450) tailleCadre = Math.round(368*0.9);
       
-      this.cadreElem.style.left = Math.round(window.innerWidth*0.05)+"px";
-      this.cadreElem.style.top = (window.innerHeight-Math.round(tailleCadre/this.ratio)-50)+"px";
+      if (window.innerWidth > 450) {
+        this.cadreElem.style.left = "20px";
+        this.cadreElem.style.top = "200px";
+      } else {
+        this.cadreElem.style.left = Math.round(window.innerWidth*0.05)+"px";
+        this.cadreElem.style.top = (window.innerHeight-Math.round(tailleCadre/this.ratio)-50)+"px";
+      }
+
       this.ratio = parseInt(this.imageElem.style.width.substring(0, this.imageElem.style.width.length - 2), 10) / parseInt(this.imageElem.style.height.substring(0, this.imageElem.style.height.length - 2), 10)
 
       this.cadreElem.style.width = tailleCadre+"px";
