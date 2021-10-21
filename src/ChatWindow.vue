@@ -81,6 +81,7 @@
       @edit="$emit('edit', $event)"
       :colors="colors" 
       :mapSetting="mapSetting"
+      :showInputText="showInputText"
       :onlyButton="false"/> 
   </div>
 </template>
@@ -177,6 +178,10 @@ export default {
     },
     mapSetting : {
       type: Object,
+      required: true
+    },
+    showInputText : {
+      type: Boolean,
       required: true
     },
     alwaysScrollToBottom: {

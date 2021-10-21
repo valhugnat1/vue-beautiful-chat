@@ -1,5 +1,5 @@
 <template>
-  <div class="sc-message-list" ref="scrollList" :style="{backgroundColor: colors.messageList.bg}" @scroll="handleScroll">
+  <div class="sc-message-list" ref="scrollList" :style="[showInputText ? {backgroundColor: colors.messageList.bg}:{backgroundColor: colors.messageList.bg, height: '100%'}]" @scroll="handleScroll">
     <Message v-for="(message, idx) in messages" :message="message" :user="profile(message.author)" :key="idx" :colors="colors" :messageStyling="messageStyling" :showEdition="showEdition" :showDeletion="showDeletion" @remove="$emit('remove', message)">
       <template v-slot:user-avatar="scopedProps">
         <slot name="user-avatar" :user="scopedProps.user" :message="scopedProps.message">
@@ -45,6 +45,7 @@
       @edit="$emit('edit', $event)"
       :colors="colors"
       :mapSetting="mapSetting"
+      :showInputText="showInputText"
       :onlyButton="true"
       :messages="messages" />
   </div>
@@ -78,6 +79,10 @@ export default {
     },
     mapSetting: {
       type: Object,
+      required: true
+    },
+    showInputText: {
+      type: Boolean,
       required: true
     },
     alwaysScrollToBottom: {

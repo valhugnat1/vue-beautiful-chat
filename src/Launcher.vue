@@ -31,6 +31,7 @@
       :showTypingIndicator="showTypingIndicator"
       :colors="colors"
       :mapSetting="mapSetting"
+      :showInputText="showInputText"
       :alwaysScrollToBottom="alwaysScrollToBottom"
       :messageStyling="messageStyling"
       :disableUserListToggle="disableUserListToggle"
@@ -181,6 +182,10 @@ export default {
     mapSetting: {
       type: Object,
       required: true
+    },
+    showInputText:{
+      type: Boolean,
+      required: false
     },
     colors: {
       type: Object,

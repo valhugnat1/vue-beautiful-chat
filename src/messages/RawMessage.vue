@@ -70,7 +70,7 @@ export default {
   word-wrap: break-word;
 }
 .sc-message--content.received .sc-message--file {
-  color: #365ca7;
+  /*color: #365ca7;*/
   background-color: white;
   margin-right: 10px;
 }

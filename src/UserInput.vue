@@ -7,7 +7,7 @@
       {{file.name}}
       <span class='delete-file-message' @click="cancelFile()"><img :src="icons.closeSvg.img" :alt="icons.closeSvg.name" height="10" title='Remove the file' /></span>
     </div>
-    <form class="sc-user-input" :class="{active: inputActive}" :style="{background: colors.userInput.bg}" v-if="onlyButton == false">
+    <form class="sc-user-input" :class="{active: inputActive}" :style="{background: colors.userInput.bg}" v-if="onlyButton == false && showInputText">
       <div
         role="button"
         tabIndex="0"
@@ -156,6 +156,10 @@ export default {
     },
     mapSetting : {
       type: Object,
+      required: true
+    },
+    showInputText : {
+      type: Boolean,
       required: true
     },
     onlyButton: {
