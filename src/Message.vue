@@ -1,6 +1,6 @@
 <template>
   <div class="sc-message">
-    <div class="sc-message--content" :style="{color: colors.messageList.text}" :class="{
+    <div class="sc-message--content" :style="{color: colors.receivedMessage.text}" :class="{
         sent: message.author === 'me',
         received: message.author !== 'me' && message.type !== 'system',
         system: message.type === 'system'
