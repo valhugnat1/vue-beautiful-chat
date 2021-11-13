@@ -56,7 +56,7 @@
           </user-input-button>
         </div>
         <button v-if="mapSetting.exist" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
-          <img class="img-indicator-map" src="artybot/local.svg" />
+          <img class="img-indicator-map" src="/api/assets/test_bot/Balise_menu.png" style="height: 50px;"/>
         </button>
       </div>
     </form>

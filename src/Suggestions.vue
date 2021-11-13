@@ -5,33 +5,32 @@
           @splide:moved="moved"
         >
           <splide-slide v-for="(suggestion, idx) in suggestions" :key="suggestion.id" v-if="(currentHour >= suggestion.heureDebut && currentHour <= suggestion.heureFin) || suggestion.heureDebut === undefined || suggestion.heureFin === undefined" >
-            <button v-bind:class="{ 'sc-suggestions-element-carrousel': suggestion.img !== undefined, 'sc-suggestions-element': suggestion.img === undefined }"  v-on:click="$emit('sendSuggestion', suggestion.choice)"
+            
+            <button v-bind:class="{ 'sc-suggestions-element-carrousel': suggestion.img !== undefined, 'sc-suggestions-element': suggestion.img === undefined }" 
+             v-on:click="buttonClick(suggestion.cliqueGeneral, suggestion.boutonSavoirPlus, suggestion.choice, 'general')"
             :style="[colors.carrousel !== undefined ? {'borderColor': colors.sentMessage.text, 'color': colors.sentMessage.text, 'background': colors.carrousel.bg} : 
             {'borderColor': colors.sentMessage.text, 'color': colors.sentMessage.text, 'background': 'white'} ]" :key="idx">
 
-              <div class="sc-suggestions-element-img" 
-              :style="[suggestion.description !== undefined ? 
-              suggestion.telephone !== suggestion.localisation ? 
-              suggestion.localisation !== undefined && suggestion.telephone !== undefined ? 
-              {'height' : setHeightImg('18vh'), 'background-image': 'url(' + suggestion.img + ')'} : 
-              {'height' : setHeightImg('24vh'), 'background-image': 'url(' + suggestion.img + ')'} : 
-              {'height' : setHeightImg('30vh'), 'background-image': 'url(' + suggestion.img + ')'} : 
-              {'height' : setHeightImg('40vh'), 'background-image': 'url(' + suggestion.img + ')'}]" > </div>
+              <div class="sc-suggestions-element-img" :style="{'height' : setHeightImg(suggestion), 'background-image': 'url(' + suggestion.img + ')'}" > </div>
 
-
-              
-              
               <div style="text-align: center; line-height: 40px; font-size: 16px;" :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]">{{suggestion.choice}}</div>
 
               <div style="margin-bottom: 0.5em; text-align: left; text-overflow: ellipsis; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; 
               padding: 0px 8px 0px 8px; height: 5.8em; " :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.textBody} : {'color': 'black'}]" v-if="suggestion.description !== undefined"> 
               <span v-if="suggestion.localisation !== undefined"> {{distanceGoogle[idx]}} {{tempsGoogle[idx]}} <br/></span> {{suggestion.description}}</div> 
 
-              <div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]" v-on:click.stop.prevent="getGoogleAdress(suggestion)" 
+              <div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" 
+              :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]" v-on:click.stop.prevent="getGoogleAdress(suggestion)" 
               v-if="suggestion.localisation !== undefined">Adresse 📍</div>
 
-              <a :href="`tel:${suggestion.telephone}`" style="text-decoration: none;"><div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]"
+              <a :href="`tel:${suggestion.telephone}`" style="text-decoration: none;"><div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" 
+              :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]"
               v-on:click.stop.prevent="" v-if="suggestion.telephone !== undefined">☎️ {{suggestion.telephone}}</div></a>
+
+              <div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]" 
+              v-on:click.stop.prevent="buttonClick(suggestion.cliqueGeneral, suggestion.boutonSavoirPlus, suggestion.choice, 'special')" 
+              v-if="suggestion.boutonSavoirPlus">A savoir plus ➕</div>
+
             </button>
           </splide-slide>
         </splide>
@@ -128,6 +127,7 @@ export default {
     }
 
     function getDistance(position) {
+      console.log("position", position)
       function calcCrow (lat1, lon1, lat2, lon2) {
         var R = 6371; // km
         var dLat = toRad(lat2-lat1);
@@ -144,18 +144,22 @@ export default {
       function toRad (Value) {
         return Value * Math.PI / 180;
       }
+      console.log("position", position.coords.latitude, position.coords.longitude)
 
+      console.log("self.suggestions", selfSuggestions, selfDistanceGoogle)
       var i = 0
-      for (var suggestion in self.suggestions) 
+      for (var suggestion in selfSuggestions) 
       {
-        if (self.suggestions[i].latitude !== undefined)
+        console.log(i, selfSuggestions[i])
+        if (selfSuggestions[i].latitude !== undefined)
         {
-          self.distanceGoogle.push("📍 " + calcCrow(position.coords.latitude, position.coords.longitude, self.suggestions[i].latitude, self.suggestions[i].longitude) + " km")
+          selfDistanceGoogle.push("📍 " + calcCrow(position.coords.latitude, position.coords.longitude, selfSuggestions[i].latitude, selfSuggestions[i].longitude) + " km")
         } else {
-          self.distanceGoogle.push("")
+          selfDistanceGoogle.push("")
         }
         i = i + 1
       }
+      console.log(selfDistanceGoogle)
 
     }
 
@@ -163,10 +167,16 @@ export default {
       console.warn(`ERREUR (${err.code}): ${err.message}`);
     }
 
-    self = this
-    console.log(this);
+    var selfSuggestions = []
+    var selfDistanceGoogle = []
+    setTimeout(() => {
+      console.log(this);
+      selfSuggestions = this.suggestions
+      selfDistanceGoogle = this.distanceGoogle
 
-    navigator.geolocation.getCurrentPosition(getDistance)
+
+      navigator.geolocation.getCurrentPosition(getDistance, error)
+    }, 2000)
 
     /*let myPromise = new Promise(function(myResolve, myReject) {
       let recaptchaScript = document.createElement('script')
@@ -190,21 +200,27 @@ export default {
     
   },
   methods: {
-    setHeightImg : function (heightImgBase) {
+    buttonClick : function (generalClickActive, speClickActive, msg, path) {
+
+      if (generalClickActive == undefined) generalClickActive = true
+      if (speClickActive == undefined) speClickActive = false 
+
+      console.log(generalClickActive, speClickActive, msg, path);
+      if ((path == "general" && generalClickActive) || (path == "special" && speClickActive ) )
+      {
+        this.$emit('sendSuggestion', msg)
+      }
+      
+    },
+    setHeightImg : function (suggestion) {
+
+      var elemNoneDisplay = [suggestion.description, suggestion.boutonSavoirPlus, suggestion.telephone, suggestion.localisation].filter(x => x==undefined).length
+      if (elemNoneDisplay == 4) elemNoneDisplay = 5 
       if (window.innerWidth > 450) 
       {
-        console.log(heightImgBase)
-        if ('18vh' == heightImgBase) {
-          return "100px"
-        } else if ('24vh' == heightImgBase) {
-          return "140px"
-        } else if ('30vh' == heightImgBase) {
-          return "160px"
-        } else if ('40vh' == heightImgBase) {
-          return "230px"
-        }
+        return (90 + elemNoneDisplay*30).toString() + "px"
       } else {
-        return heightImgBase
+        return (15 + elemNoneDisplay*3.5).toString() + "vh"
       }
     },
     getGoogleAdress : function (suggestion) {
@@ -222,6 +238,10 @@ export default {
       window.open(url, '_blank');
 
       navigator.geolocation.getCurrentPosition(success, error)
+    },
+    getlinkExtern : function (suggestion) {
+
+      window.open(suggestion.boutonSavoirPlus, '_blank');
     }
   }, create() {
     if (typeof this.colors.carrousel !== 'undefined') {

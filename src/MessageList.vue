@@ -136,8 +136,12 @@ export default {
   },
   methods: {
     _scrollDown () {
-      //this.$refs.scrollList.scrollTop = this.$refs.scrollList.scrollHeight
-      this.$refs.scrollList.scrollTop = this.$refs.scrollList.scrollTop+20
+      //this.$refs.scrollList.scrollTop = this.$refs.scrollList.scrollHeight // => Pour tjs avoir le scroll à fond
+      var nbMsg = 0 
+      var nbMsg = this.$refs.scrollList.getElementsByClassName("message_me").length
+      if (nbMsg != 0 ) {
+        this.$refs.scrollList.scrollTop = this.$refs.scrollList.getElementsByClassName("message_me")[nbMsg-1].offsetTop-80
+      }
       
       /*
       setTimeout(() => {

@@ -1,15 +1,18 @@
 <template>
   <div>
+  <div id="backgroundFlou"></div>
     <div id="cadreForMapMenu" ref="cadreForMapMenu" @mousedown="initialClick" @mouseup="initialClick" @touchstart="initialClickTel" @touchmove.passive="moveTel">
       <img id="imgMap" ref="imgMap" :src="'/api/assets/test_bot/'+mapSetting.imgMap" > 
-      <img class="baliseTest" :id="'baliseTest'+idx" v-for="(suggestion, idx) in suggestions" :key="idx" :ref="'baliseTest'+idx" src='/api/assets/test_bot/Balise_plan.png'> 
+      <img id="positionUtilisateur" class="baliseTest" ref='positionUtilisateur' src='/api/assets/test_bot/Balise_utilisateur.png'> 
+      <img class="baliseTest" :id="'baliseTest'+idx" v-for="(suggestion, idx) in suggestions" :key="idx" :ref="'baliseTest'+idx" src='/api/assets/test_bot/Balise_Plan.svg'> 
      
     </div>
     <div @mousedown="zoomCarte" class="doubleButtonZoom" id="buttonZoom"> 
-      +
+      <img class="imgZoom" src='/api/assets/test_bot/Arty_loupe_+.png' > 
     </div>
     <div @mousedown="dezoomCarte" id="buttonDezoom" class="doubleButtonZoom">
-      -
+      <img class="imgZoom" src='/api/assets/test_bot/Arty_loupe_-.png' > 
+      
     </div>
   </div>
 </template>
@@ -60,7 +63,34 @@ function valueZoomTranslat (img, cdr, imgMarg, indiZoom, ratio) {
   return ret
 }
 
-function baliseSurLaCarte (baliseImg, newX, newY, listLoca, mapSetting, ImgNaturalWidth, ImgNaturalHeight, ImgWidth = 1, ImgHeight = 1, xMov = true, YMov = true) {
+function baliseSurLaCarte (baliseImg, baliseUtili, newX, newY, listLoca, mapSetting, ImgNaturalWidth, ImgNaturalHeight, ImgWidth = 1, ImgHeight = 1, xMov = true, YMov = true) {
+
+  
+  function success(pos) {
+    var crdLat = pos.coords.latitude;
+    var crdLon = pos.coords.longitude;
+    console.log(pos.coords);
+
+    var crdLat = 48.85723824457027
+    var crdLon = 2.35213476664655
+    console.log(crdLat, crdLon);
+
+    var resTempo = gps2pixel(crdLat, crdLon, mapSetting.positionLatLeftTop, mapSetting.positionLatRightButtom, mapSetting.positionLonLeftTop, mapSetting.positionLonRightButtom,  ImgNaturalWidth, ImgNaturalHeight)
+    
+    console.log(baliseUtili)
+
+    var xBalise = (newX + resTempo.x* (ImgWidth/ImgNaturalWidth) - baliseUtili.width / 2) + "px"
+    var yBalise = (newY  + resTempo.y* (ImgHeight/ImgNaturalHeight)- baliseUtili.height / 2) + "px"
+
+    if (xMov) baliseUtili.style.left =  xBalise
+    if (YMov) baliseUtili.style.top = yBalise 
+  }
+
+  function error(err) {
+    console.warn(`ERREUR (${err.code}): ${err.message}`);
+  }
+
+  navigator.geolocation.getCurrentPosition(success, error)
 
   var i = 0
   listLoca.forEach(function(item){
@@ -99,7 +129,8 @@ export default {
       positionLonRightButtom: 0,
       ListNomLieu: [],
       listLoca: [],
-      baliseImg : []
+      baliseImg : [], 
+      baliseUtili : 0
     }
   },
   props: 
@@ -137,7 +168,7 @@ export default {
 
       if ((newX <= 0 || newX < parseInt(this.imageElem.style.left .substring(0, this.imageElem.style.left .length - 2), 10)) && (newXBorder > cdrWid  || newX > parseInt(this.imageElem.style.left .substring(0, this.imageElem.style.left .length - 2), 10))) {this.imageElem.style.left = newX + "px"; xMov = true; }
       if ((newY <= 0 || newY < parseInt(this.imageElem.style.top .substring(0, this.imageElem.style.top .length - 2), 10)) && ((newYBorder > cdrHei) || newY > parseInt(this.imageElem.style.top .substring(0, this.imageElem.style.top .length - 2), 10))) {this.imageElem.style.top = newY + "px"; yMov = true;}
-      baliseSurLaCarte (this.baliseImg, newX, newY, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid, imgHei, xMov, yMov)
+      baliseSurLaCarte (this.baliseImg, this.baliseUtili, newX, newY, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid, imgHei, xMov, yMov)
     },
     
     move(e){
@@ -152,7 +183,7 @@ export default {
       var newXBorder = e.clientX - this.diffCoinUtiliX + imgwid; 
       var newYBorder = e.clientY - this.diffCoinUtiliY + imgHei; 
 
-      baliseSurLaCarte (this.baliseImg, newX, newY, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid, imgHei)
+      baliseSurLaCarte (this.baliseImg, this.baliseUtili, newX, newY, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid, imgHei)
 
 
 
@@ -244,7 +275,7 @@ export default {
       this.imageElem.style.left = imElLeft + "px";
       this.imageElem.style.top = imElTop + "px";
 
-      baliseSurLaCarte (this.baliseImg, imElLeft, imElTop, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid+ this.indiZoom*this.ratio, imgHei+ this.indiZoom)
+      baliseSurLaCarte (this.baliseImg, this.baliseUtili, imElLeft, imElTop, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid+ this.indiZoom*this.ratio, imgHei+ this.indiZoom)
 
 
     },
@@ -269,13 +300,13 @@ export default {
         this.imageElem.style.left = imElLeft + "px";
         this.imageElem.style.top = imElTop + "px";
 
-        baliseSurLaCarte (this.baliseImg, imElLeft, imElTop, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid - this.indiZoom*this.ratio, imgHei - this.indiZoom)
+        baliseSurLaCarte (this.baliseImg, this.baliseUtili, imElLeft, imElTop, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid - this.indiZoom*this.ratio, imgHei - this.indiZoom)
         
       } else {
         this.imageElem.style.width = cdrWid + "px";
         this.imageElem.style.height = cdrHei + "px";
 
-        baliseSurLaCarte (this.baliseImg, 0, 0, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, cdrWid, cdrHei)
+        baliseSurLaCarte (this.baliseImg, this.baliseUtili, 0, 0, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, cdrWid, cdrHei)
         
         this.imageElem.style.top = "0px";
         this.imageElem.style.left = "0px";
@@ -298,6 +329,8 @@ export default {
 
       });
 
+      this.baliseUtili = this.$refs["positionUtilisateur"]
+
 
       
       this.imageElem = this.$refs.imgMap;
@@ -305,9 +338,9 @@ export default {
       this.imageElem.setAttribute('draggable', false);
 
       var imageElemStyleWidth = this.mapSetting.sizeWidth
-      var imageElemStyleHeight = this.mapSetting.sizeheight
-      this.ImgNaturalWidth = 2317
-      this.ImgNaturalHeight = 1548
+      var imageElemStyleHeight = this.mapSetting.sizeHeight
+      this.ImgNaturalWidth = this.mapSetting.sizeWidth
+      this.ImgNaturalHeight = this.mapSetting.sizeHeight
 
       this.indiZoom = this.mapSetting.zoomIndice //Math.round(imageElemStyleWidth/10);
       this.imageElem.style.width = imageElemStyleWidth+"px";
@@ -335,7 +368,7 @@ export default {
       this.imageElem.style.top = "-"+imElTop+"px";
 
 
-      baliseSurLaCarte (this.baliseImg, -1*imElLeft, -1*imElTop, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight)
+      baliseSurLaCarte (this.baliseImg, this.baliseUtili, -1*imElLeft, -1*imElTop, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight)
 
 
       this.dezoom
@@ -363,7 +396,8 @@ export default {
   z-index: 3;
   top : 0px;
   left : 0px;
-  width: 10%;
+  width: 25px;
+;
 }
 #cadreForMapMenu
 {
@@ -379,7 +413,7 @@ export default {
     position: absolute;
     top: 80%;
     padding: 10px;
-    background-color: #365ca7;
+    /*background-color: #365ca7;*/
     border-radius: 10px;
     color: white;
     font-size: 18px;
@@ -397,4 +431,20 @@ export default {
   text-align: center;
 
 }
+
+.imgZoom {
+  width: 80px;
+}
+
+#backgroundFlou {
+  position: absolute;
+    top: 0px;
+    left: 0px;
+    background: white;
+    width: 5000px;
+    height: 1000px;
+    opacity: 60%;
+}
+
 </style>
+
