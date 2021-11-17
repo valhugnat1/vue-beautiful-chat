@@ -1,17 +1,17 @@
 <template>
   <div>
   <div id="backgroundFlou"></div>
-    <div id="cadreForMapMenu" ref="cadreForMapMenu" @mousedown="initialClick" @mouseup="initialClick" @touchstart="initialClickTel" @touchmove.passive="moveTel">
-      <img id="imgMap" ref="imgMap" :src="'/api/assets/test_bot/'+mapSetting.imgMap" > 
-      <img id="positionUtilisateur" class="baliseTest" ref='positionUtilisateur' src='/api/assets/test_bot/Balise_utilisateur.png'> 
-      <img class="baliseTest" :id="'baliseTest'+idx" v-for="(suggestion, idx) in suggestions" :key="idx" :ref="'baliseTest'+idx" src='/api/assets/test_bot/Balise_Plan.svg'> 
+    <div id="cadreForMapMenu" ref="cadreForMapMenu" @mousedown="initialClick" @mouseup="endClick" @mousemove="move" @touchstart="initialClickTel" @touchmove.passive="moveTel">
+      <img id="imgMap" ref="imgMap" :src="'/api/assets/'+mapSetting.imgMap" > 
+      <img id="positionUtilisateur" class="baliseTest" ref='positionUtilisateur' :src="'/api/assets/'+mapSetting.imgBaliseUtili"> 
+      <img class="baliseTest" :id="'baliseTest'+idx" v-for="(suggestion, idx) in suggestions" :key="idx" :ref="'baliseTest'+idx" :src="'/api/assets/'+mapSetting.imgBalisePlan"> 
      
     </div>
     <div @mousedown="zoomCarte" class="doubleButtonZoom" id="buttonZoom"> 
-      <img class="imgZoom" src='/api/assets/test_bot/Arty_loupe_+.png' > 
+      <img class="imgZoom" :src="'/api/assets/'+mapSetting.imgZoom" > 
     </div>
     <div @mousedown="dezoomCarte" id="buttonDezoom" class="doubleButtonZoom">
-      <img class="imgZoom" src='/api/assets/test_bot/Arty_loupe_-.png' > 
+      <img class="imgZoom" :src="'/api/assets/'+mapSetting.imgDezoom" > 
       
     </div>
   </div>
@@ -69,15 +69,12 @@ function baliseSurLaCarte (baliseImg, baliseUtili, newX, newY, listLoca, mapSett
   function success(pos) {
     var crdLat = pos.coords.latitude;
     var crdLon = pos.coords.longitude;
-    console.log(pos.coords);
 
-    var crdLat = 48.85723824457027
-    var crdLon = 2.35213476664655
-    console.log(crdLat, crdLon);
+    //var crdLat = 48.85723824457027
+    //var crdLon = 2.35213476664655
 
     var resTempo = gps2pixel(crdLat, crdLon, mapSetting.positionLatLeftTop, mapSetting.positionLatRightButtom, mapSetting.positionLonLeftTop, mapSetting.positionLonRightButtom,  ImgNaturalWidth, ImgNaturalHeight)
     
-    console.log(baliseUtili)
 
     var xBalise = (newX + resTempo.x* (ImgWidth/ImgNaturalWidth) - baliseUtili.width / 2) + "px"
     var yBalise = (newY  + resTempo.y* (ImgHeight/ImgNaturalHeight)- baliseUtili.height / 2) + "px"
@@ -130,7 +127,8 @@ export default {
       ListNomLieu: [],
       listLoca: [],
       baliseImg : [], 
-      baliseUtili : 0
+      baliseUtili : 0,
+      clicDownMouse : false
     }
   },
   props: 
@@ -172,38 +170,45 @@ export default {
     },
     
     move(e){
+      
+      if (this.clicDownMouse)
+      {
+        var mouseX = e.clientX - (window.innerWidth - 395)
+        var mouseY = e.clientY - (window.innerHeight - 690)
 
-      var cdrWid = parseInt(this.cadreElem.style.width.substring(0, this.cadreElem.style.width.length - 2), 10)
-      var cdrHei = parseInt(this.cadreElem.style.height.substring(0, this.cadreElem.style.height.length - 2), 10)
-      var imgwid = parseInt(this.imageElem.style.width.substring(0, this.imageElem.style.width.length - 2), 10)
-      var imgHei = parseInt(this.imageElem.style.height.substring(0, this.imageElem.style.height.length - 2), 10)
+        var cdrWid = parseInt(this.cadreElem.style.width.substring(0, this.cadreElem.style.width.length - 2), 10)
+        var cdrHei = parseInt(this.cadreElem.style.height.substring(0, this.cadreElem.style.height.length - 2), 10)
+        var imgwid = parseInt(this.imageElem.style.width.substring(0, this.imageElem.style.width.length - 2), 10)
+        var imgHei = parseInt(this.imageElem.style.height.substring(0, this.imageElem.style.height.length - 2), 10)
 
-      var newX = e.clientX - this.diffCoinUtiliX; 
-      var newY = e.clientY - this.diffCoinUtiliY;
-      var newXBorder = e.clientX - this.diffCoinUtiliX + imgwid; 
-      var newYBorder = e.clientY - this.diffCoinUtiliY + imgHei; 
+        var newX = mouseX - this.diffCoinUtiliX; 
+        var newY = mouseY - this.diffCoinUtiliY;
+        var newXBorder = mouseX - this.diffCoinUtiliX + imgwid; 
+        var newYBorder = mouseY - this.diffCoinUtiliY + imgHei; 
 
-      baliseSurLaCarte (this.baliseImg, this.baliseUtili, newX, newY, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid, imgHei)
+        var xMov = false
+        var yMov = false
 
-
-
-      if ((newX <= 0 || newX < parseInt(this.imageElem.style.left .substring(0, this.imageElem.style.left .length - 2), 10)) && (newXBorder > cdrWid  || newX > parseInt(this.imageElem.style.left .substring(0, this.imageElem.style.left .length - 2), 10))) this.imageElem.style.left = newX + "px";
-      if ((newY <= 0 || newY < parseInt(this.imageElem.style.top .substring(0, this.imageElem.style.top .length - 2), 10)) && ((newYBorder > cdrHei) || newY > parseInt(this.imageElem.style.top .substring(0, this.imageElem.style.top .length - 2), 10))) this.imageElem.style.top = newY + "px";
-
-
+        if ((newX <= 0 || newX < parseInt(this.imageElem.style.left .substring(0, this.imageElem.style.left .length - 2), 10)) && (newXBorder > cdrWid  || newX > parseInt(this.imageElem.style.left .substring(0, this.imageElem.style.left .length - 2), 10))) {this.imageElem.style.left = newX + "px"; xMov = true; }
+        if ((newY <= 0 || newY < parseInt(this.imageElem.style.top .substring(0, this.imageElem.style.top .length - 2), 10)) && ((newYBorder > cdrHei) || newY > parseInt(this.imageElem.style.top .substring(0, this.imageElem.style.top .length - 2), 10))) {this.imageElem.style.top = newY + "px"; yMov = true;}
+        baliseSurLaCarte (this.baliseImg, this.baliseUtili, newX, newY, this.listLoca, this.mapSetting, this.ImgNaturalWidth, this.ImgNaturalHeight, imgwid, imgHei, xMov, yMov)
+      }
     },
     
     initialClick(e) {
 
-
       if (window.innerWidth > 450) {
+
+        this.clicDownMouse = true
+
+        var mouseX = e.clientX - (window.innerWidth - 395)
+        var mouseY = e.clientY - (window.innerHeight- 690)
 
         var borderLeft = parseInt(this.cadreElem.style.left .substring(0,  this.cadreElem.style.left.length -  2), 10)
         var borderTop = parseInt(this.cadreElem.style.top .substring(0,  this.cadreElem.style.top.length -  2), 10)
         
-        var XClientOnMap = Math.round((e.clientX - borderLeft - parseInt(this.imageElem.style.left .substring(0, this.imageElem.style.left.length - 2), 10))*(this.ImgNaturalWidth / parseInt(this.imageElem.style.width.substring(0, this.imageElem.style.width .length - 2), 10)))
-        var YClientOnMap = Math.round((e.clientY - borderTop - parseInt(this.imageElem.style.top .substring(0,  this.imageElem.style.top.length -  2), 10))*(this.ImgNaturalHeight /parseInt(this.imageElem.style.height.substring(0,this.imageElem.style.height .length - 2), 10)))
-
+        var XClientOnMap = Math.round((mouseX - borderLeft - parseInt(this.imageElem.style.left .substring(0, this.imageElem.style.left.length - 2), 10))*(this.ImgNaturalWidth / parseInt(this.imageElem.style.width.substring(0, this.imageElem.style.width .length - 2), 10)))
+        var YClientOnMap = Math.round((mouseY - borderTop - parseInt(this.imageElem.style.top .substring(0,  this.imageElem.style.top.length -  2), 10))*(this.ImgNaturalHeight /parseInt(this.imageElem.style.height.substring(0,this.imageElem.style.height .length - 2), 10)))
 
         var resLieuClic = verifClicButton (this.ListNomLieu, this.listLoca, XClientOnMap, YClientOnMap, this.sensibilitClicPosi, 
         this.mapSetting.positionLatLeftTop, this.mapSetting.positionLatRightButtom, this.mapSetting.positionLonLeftTop, this.mapSetting.positionLonRightButtom, 
@@ -215,13 +220,11 @@ export default {
           this.$emit('sendSuggestion', resLieuClic)
         }
 
-        
-        document.addEventListener("mousemove", this.move, false, this.sensibilitClicPosi);
-
-
         var rect = this.imageElem.getBoundingClientRect();
-        this.diffCoinUtiliX = e.clientX - rect.left;
-        this.diffCoinUtiliY = e.clientY - rect.top;
+        
+        this.diffCoinUtiliX = mouseX - (rect.left  - (window.innerWidth - 395)) + parseInt(this.cadreElem.style.left .substring(0,  this.cadreElem.style.left.length -  2), 10);
+        this.diffCoinUtiliY = mouseY - (rect.top  - (window.innerHeight- 690)) + parseInt(this.cadreElem.style.top .substring(0,  this.cadreElem.style.top.length -  2), 10);
+        console.log(mouseX , mouseY, XClientOnMap, YClientOnMap, this.diffCoinUtiliX, this.diffCoinUtiliY, rect.left  - (window.innerWidth - 395), rect.top  - (window.innerHeight- 690), parseInt(this.cadreElem.style.left .substring(0,  this.cadreElem.style.left.length -  2), 10), parseInt(this.cadreElem.style.top .substring(0,  this.cadreElem.style.top.length -  2), 10));
       }
     }, 
     
@@ -233,7 +236,6 @@ export default {
       
       var XClientOnMap = Math.round((p.clientX - borderLeft - parseInt(this.imageElem.style.left .substring(0, this.imageElem.style.left.length - 2), 10))*(this.ImgNaturalWidth / parseInt(this.imageElem.style.width.substring(0, this.imageElem.style.width .length - 2), 10)))
       var YClientOnMap = Math.round((p.clientY - borderTop - parseInt(this.imageElem.style.top .substring(0,  this.imageElem.style.top.length -  2), 10))*(this.ImgNaturalHeight /parseInt(this.imageElem.style.height.substring(0,this.imageElem.style.height .length - 2), 10)))
-
 
       var resLieuClic = verifClicButton (this.ListNomLieu, this.listLoca, XClientOnMap, YClientOnMap, this.sensibilitClicPosi, 
       this.mapSetting.positionLatLeftTop, this.mapSetting.positionLatRightButtom, this.mapSetting.positionLonLeftTop, this.mapSetting.positionLonRightButtom, 
@@ -249,10 +251,11 @@ export default {
       var rect = this.imageElem.getBoundingClientRect();
       this.diffCoinUtiliX = p.clientX - rect.left + parseInt(this.cadreElem.style.left .substring(0,  this.cadreElem.style.left.length -  2), 10);
       this.diffCoinUtiliY = p.clientY - rect.top + parseInt(this.cadreElem.style.top .substring(0,  this.cadreElem.style.top.length -  2), 10);
+      console.log(p.clientX , p.clientY, XClientOnMap, YClientOnMap, this.diffCoinUtiliX, this.diffCoinUtiliY, rect.left, rect.top, parseInt(this.cadreElem.style.left .substring(0,  this.cadreElem.style.left.length -  2), 10), parseInt(this.cadreElem.style.top .substring(0,  this.cadreElem.style.top.length -  2), 10));
     }, 
     endClick (image) {
 
-      document.removeEventListener("mousemove", this.move);
+      this.clicDownMouse = false
 
     },
     zoomCarte () { 

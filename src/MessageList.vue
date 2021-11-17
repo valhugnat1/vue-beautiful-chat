@@ -140,7 +140,7 @@ export default {
       var nbMsg = 0 
       var nbMsg = this.$refs.scrollList.getElementsByClassName("message_me").length
       if (nbMsg != 0 ) {
-        this.$refs.scrollList.scrollTop = this.$refs.scrollList.getElementsByClassName("message_me")[nbMsg-1].offsetTop-80
+        this.$refs.scrollList.scrollTop = this.$refs.scrollList.getElementsByClassName("message_me")[nbMsg-1].offsetTop-65
       }
       
       /*
@@ -188,5 +188,6 @@ export default {
   overflow-y: auto;
   background-size: 100%;
   padding: 40px 0px;
+  border-radius: 0px 0px 10px 10px;
 }
 </style>
