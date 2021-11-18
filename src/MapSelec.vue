@@ -65,7 +65,7 @@ function valueZoomTranslat (img, cdr, imgMarg, indiZoom, ratio) {
 
 function baliseSurLaCarte (baliseImg, baliseUtili, newX, newY, listLoca, mapSetting, ImgNaturalWidth, ImgNaturalHeight, ImgWidth = 1, ImgHeight = 1, xMov = true, YMov = true) {
 
-  
+  console.log(baliseImg, listLoca);
   function success(pos) {
     var crdLat = pos.coords.latitude;
     var crdLon = pos.coords.longitude;
@@ -91,6 +91,7 @@ function baliseSurLaCarte (baliseImg, baliseUtili, newX, newY, listLoca, mapSett
 
   var i = 0
   listLoca.forEach(function(item){
+    console.log(item[0],item[1]);
     var resTempo = gps2pixel(item[0],item[1], mapSetting.positionLatLeftTop, mapSetting.positionLatRightButtom, mapSetting.positionLonLeftTop, mapSetting.positionLonRightButtom,  ImgNaturalWidth, ImgNaturalHeight)
     
     var xBalise = (newX + resTempo.x* (ImgWidth/ImgNaturalWidth) - baliseImg[i][0].width / 2) + "px"
