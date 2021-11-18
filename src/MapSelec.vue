@@ -69,6 +69,7 @@ function baliseSurLaCarte (baliseImg, baliseUtili, newX, newY, listLoca, mapSett
   function success(pos) {
     var crdLat = pos.coords.latitude;
     var crdLon = pos.coords.longitude;
+    console.log(pos)
 
     //var crdLat = 48.85723824457027
     //var crdLon = 2.35213476664655
@@ -101,7 +102,19 @@ function baliseSurLaCarte (baliseImg, baliseUtili, newX, newY, listLoca, mapSett
     i = i + 1
   });
 
-  navigator.geolocation.getCurrentPosition(success, error)
+  try {
+    if (mapSetting.actiPosition) var a = true
+  } catch (error) {
+    mapSetting.actiPosition = true
+  }
+
+  console.log("mapSetting.actiPosition ", mapSetting.actiPosition)
+  if (mapSetting.actiPosition) {
+    navigator.geolocation.getCurrentPosition(success, error)
+  } else {
+    baliseUtili.style.display = "None"
+  }
+
 }
 
 export default {
