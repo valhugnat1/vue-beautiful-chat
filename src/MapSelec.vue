@@ -393,7 +393,7 @@ export default {
       this.dezoom
 
 
-    }, 200)
+    }, 4000)
 
 
 
