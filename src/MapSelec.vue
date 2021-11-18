@@ -4,7 +4,7 @@
     <div id="cadreForMapMenu" ref="cadreForMapMenu" @mousedown="initialClick" @mouseup="endClick" @mousemove="move" @touchstart="initialClickTel" @touchmove.passive="moveTel">
       <img id="imgMap" ref="imgMap" :src="'/api/assets/'+mapSetting.imgMap" > 
       <img id="positionUtilisateur" class="baliseTest" ref='positionUtilisateur' :src="'/api/assets/'+mapSetting.imgBaliseUtili"> 
-      <img class="baliseTest" :id="'baliseTest'+idx" v-for="(suggestion, idx) in suggestions" :key="idx" :ref="'baliseTest'+idx" :src="'/api/assets/'+mapSetting.imgBalisePlan"> 
+      <img class="baliseTest " :class="suggestion.localisationLat + ' ' + suggestion.localisationLon" :id="'baliseTest'+suggestion.id" v-for="(suggestion, idx) in suggestions" :key="idx" :ref="'baliseTest'+idx" :src="'/api/assets/'+mapSetting.imgBalisePlan"> 
      
     </div>
     <div @mousedown="zoomCarte" class="doubleButtonZoom" id="buttonZoom"> 
@@ -87,7 +87,6 @@ function baliseSurLaCarte (baliseImg, baliseUtili, newX, newY, listLoca, mapSett
     console.warn(`ERREUR (${err.code}): ${err.message}`);
   }
 
-  navigator.geolocation.getCurrentPosition(success, error)
 
   var i = 0
   listLoca.forEach(function(item){
@@ -101,6 +100,8 @@ function baliseSurLaCarte (baliseImg, baliseUtili, newX, newY, listLoca, mapSett
 
     i = i + 1
   });
+
+  navigator.geolocation.getCurrentPosition(success, error)
 }
 
 export default {
