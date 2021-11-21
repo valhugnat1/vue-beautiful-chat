@@ -188,6 +188,7 @@ export default {
     }
   },
   updated() {
+    console.log(this.mapSetting.exist, this.calculNbRepBeforeFct(), !this.showTypingIndicator);
     if (!this.onlyButton && this.messages != undefined && this.messages.length > 4)
     {
       if (this.messages.at(-3).data.text == "Voici la carte") {
