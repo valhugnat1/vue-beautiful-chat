@@ -55,7 +55,7 @@
             <icon-send />
           </user-input-button>
         </div>
-        <button v-if="mapSetting.exist && calculNbRepBefore && !showTypingIndicator" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
+        <button v-if="mapSetting.exist && calculNbRepBeforeFct() && !showTypingIndicator" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
           <img class="img-indicator-map" :src="'/api/assets/'+mapSetting.imgBaliseMenu" style="height: 50px;"/>
         </button>
       </div>
@@ -198,6 +198,16 @@ export default {
     }
   },
   methods: {
+    calculNbRepBeforeFct () {
+      var count = 0;
+      if (!this.onlyButton && this.messages.length > 1)
+      {
+        this.messages.forEach(element => {
+          if (element.author == "me") count = count + 1
+        });
+      }
+      return this.mapSetting.nbMsgAvantAccesMap <= count 
+    },
     modifStatutMap () {
       if (this.mapShow)
       {
