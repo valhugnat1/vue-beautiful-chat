@@ -81,6 +81,7 @@ export default {
   position: relative;
   box-sizing: border-box;
   display: flex;
+  z-index: 1;
 }
 
 .sc-header--img {
@@ -131,6 +132,7 @@ export default {
 @media (max-width: 450px) {
   .sc-header {
     border-radius: 0px;
+    z-index: 1;
   }
 }
 </style>

@@ -82,7 +82,9 @@
       :colors="colors" 
       :mapSetting="mapSetting"
       :showInputText="showInputText"
-      :onlyButton="false"/> 
+      :onlyButton="false"
+      :messages="messages"
+      :showTypingIndicator="showTypingIndicator"/> 
   </div>
 </template>
 

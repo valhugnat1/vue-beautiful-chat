@@ -180,7 +180,7 @@ export default {
 
     /*let myPromise = new Promise(function(myResolve, myReject) {
       let recaptchaScript = document.createElement('script')
-      recaptchaScript.setAttribute('src', 'http://maps.google.com/maps/api/js?key=AIzaSyAlyjo2L7BKSLJ4EQGC_qIiIspkUo391aI')
+      recaptchaScript.setAttribute('src', 'http://maps.google.com/maps/api/js?key={putKeyHere}')
       document.head.appendChild(recaptchaScript)
       myResolve();
     });

@@ -1,6 +1,8 @@
 <template>
   <div>
-  <div id="backgroundFlou"></div>
+    <zoomElem/>
+
+    <!--<div id="backgroundFlou"></div>
     <div id="cadreForMapMenu" ref="cadreForMapMenu" @mousedown="initialClick" @mouseup="endClick" @mousemove="move" @touchstart="initialClickTel" @touchmove.passive="moveTel">
       <img id="imgMap" ref="imgMap" :src="'/api/assets/'+mapSetting.imgMap" > 
       <img id="positionUtilisateur" class="baliseTest" ref='positionUtilisateur' :src="'/api/assets/'+mapSetting.imgBaliseUtili"> 
@@ -13,7 +15,7 @@
     <div @mousedown="dezoomCarte" id="buttonDezoom" class="doubleButtonZoom">
       <img class="imgZoom" :src="'/api/assets/'+mapSetting.imgDezoom" > 
       
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -118,7 +120,13 @@ function baliseSurLaCarte (baliseImg, baliseUtili, newX, newY, listLoca, mapSett
 
 }
 
+import zoomElem from "./ZoomElem.vue";
+
+
 export default {
+  components: {
+    zoomElem
+  },
   data() {
     return {
       press: false,
@@ -334,7 +342,7 @@ export default {
 
   }, mounted() {
 
-    
+    console.log("/var/lib/docker/overlay2/796e6ba7492640dd479df60807513a95bf89f22025d3d3e94e6012e60f9d00c2/diff/app/services/vivifone/node_modules/vue-beautiful-chat/src/MapSelec.vue");
     setTimeout(() => {
 
       var i = 0
@@ -402,7 +410,8 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
+
 #imgMap {
   position: absolute;
   z-index: 2;

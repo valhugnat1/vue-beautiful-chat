@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MapSelec v-if="mapShow" v-on:sendSuggestion="_submitSuggestion" :mapSetting="mapSetting" :colors="colors" :suggestions="suggestions" />
+    <ZoomElem v-if="mapShow && loadMsgMapGood && !onlyButton" v-on:quiteMap="_quiteMap" v-on:sendSuggestion="_submitSuggestion" :mapSetting="mapSetting" :colors="colors" :suggestions="suggestions" :mapOpen="mapShow" />
     <Suggestions v-if="suggestions && onlyButton" :suggestions="suggestions" v-on:sendSuggestion="_submitSuggestion" :colors="colors" />
     <div v-if="file && onlyButton" class='file-container' :style="{backgroundColor: colors.userInput.text, color: colors.userInput.bg}" >
       <span class='icon-file-message'><img :src="icons.file.img"  :alt="icons.file.name" height="15" /></span>
@@ -55,7 +55,7 @@
             <icon-send />
           </user-input-button>
         </div>
-        <button v-if="mapSetting.exist" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
+        <button v-if="mapSetting.exist && calculNbRepBefore && !showTypingIndicator" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
           <img class="img-indicator-map" :src="'/api/assets/'+mapSetting.imgBaliseMenu" style="height: 50px;"/>
         </button>
       </div>
@@ -75,7 +75,9 @@ import store from "./store/"
 import IconCross from "./components/icons/IconCross.vue";
 import IconOk from "./components/icons/IconOk.vue";
 import IconSend from "./components/icons/IconSend.vue";
-import MapSelec from "./MapSelec.vue"
+import MapSelec from "./MapSelec.vue";
+import ZoomElem from "./ZoomElem.vue";
+import { length } from 'file-loader'
 
 
 export default {
@@ -87,7 +89,8 @@ export default {
     IconCross,
     IconOk,
     IconSend,
-    MapSelec
+    MapSelec, 
+    ZoomElem
   },
   props: {
     icons:{
@@ -169,6 +172,10 @@ export default {
     messages: {
       type: Array,
       required: true
+    },
+    showTypingIndicator: {
+      type: String,
+      required: true
     }
   },
   data () {
@@ -176,24 +183,32 @@ export default {
       file: null,
       inputActive: false,
       store,
-      mapShow: false
+      mapShow: false,
+      loadMsgMapGood: false
+    }
+  },
+  updated() {
+    if (!this.onlyButton && this.messages != undefined && this.messages.length > 4)
+    {
+      if (this.messages.at(-3).data.text == "Voici la carte") {
+        this.loadMsgMapGood = true
+      } else {
+        this.loadMsgMapGood = false
+      }
     }
   },
   methods: {
     modifStatutMap () {
-
       if (this.mapShow)
       {
         this.mapShow = !this.mapShow // Cache la carte
-
       } else {
-        this._showIndicator('!map') // Envoi le massage pour demander d'afficher la carte
+        this._showIndicator('!map') // Envoi le message pour demander d'afficher la carte
         setTimeout(() => {
           this._submitSuggestion("ok") //Valide le message indiquand que la carte arrive 
           this.mapShow = !this.mapShow // Affiche la carte
         },400);
       }
-
     },
     cancelFile () {
       this.file = null
@@ -231,6 +246,9 @@ export default {
 
       }
       this.onSubmit({author: 'me', type: 'text', data: { text: suggestion }})
+    },
+    _quiteMap() {
+      this.mapShow = false // Cache la carte
     },
     _checkSubmitSuccess (success) {
       if (Promise !== undefined) {
@@ -321,6 +339,16 @@ export default {
     },
     isEditing() {
       return store.editMessage && store.editMessage.id
+    },
+    calculNbRepBefore() {
+      var count = 0;
+      if (!this.onlyButton && this.messages.length > 4)
+      {
+        this.messages.forEach(element => {
+          if (element.author == "me") count = count + 1
+        });
+      }
+      return this.mapSetting.nbMsgAvantAccesMap <= count 
     }
   },
   mounted() {
