@@ -160,9 +160,9 @@ export default Vue.extend({
       }
       var baliseUtili = this.$refs.positionUtilisateur
 
-      if (this.mapSetting.actiPosition) {
-        //navigator.geolocation.getCurrentPosition(this.successPosition, this.error)
-        navigator.geolocation.watchPosition(this.successPosition, this.error)
+      if (this.mapSetting.actiPosition && this.mapOpen) {
+        navigator.geolocation.getCurrentPosition(this.successPosition, this.error)
+        //navigator.geolocation.watchPosition(this.successPosition, this.error)
         
       } else {
         this.$refs.positionUtilisateur.style.left = "-1000px"
@@ -172,7 +172,7 @@ export default Vue.extend({
       if (this.mapOpen && baliseUtili !== undefined){
         setTimeout(() => {
           this.checkPosi()
-        }, 4000)
+        }, 3000)
       }
     },
     successPosition: function (pos) {
