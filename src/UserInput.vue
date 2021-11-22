@@ -189,23 +189,13 @@ export default {
     if (!this.onlyButton && this.messages != undefined && this.messages.length > 4)
     {
       if (this.waitongMapCount+2 == this.messages.length) {
-          //this.waitongMapCount = -10;
           this._submitSuggestion("ok") //Valide le message indiquand que la carte arrive 
-          //this.mapShow = !this.mapShow // Affiche la carte
       }
 
       if (this.waitongMapCount+4 == this.messages.length) {
           this.waitongMapCount = -10;
           this.mapShow = !this.mapShow // Affiche la carte
-          console.log("show ", this.messages);
       }
-
-      console.log("updated ", this.messages);
-      /* if (this.messages.at(-3).data.text == "Voici la carte") {
-        this.loadMsgMapGood = true
-      } else {
-        this.loadMsgMapGood = false
-      } */
     }
   },
   methods: {
@@ -226,12 +216,6 @@ export default {
       } else {
         this._showIndicator('!map') // Envoi le message pour demander d'afficher la carte
         this.waitongMapCount = this.messages.length;
-
-
-        /* setTimeout(() => {
-          this._submitSuggestion("ok") //Valide le message indiquand que la carte arrive 
-          this.mapShow = !this.mapShow // Affiche la carte
-        },1500); */
       }
     },
     cancelFile () {
