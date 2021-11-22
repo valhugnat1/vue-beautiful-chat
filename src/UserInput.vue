@@ -184,7 +184,7 @@ export default {
       loadMsgMapGood: false, 
       waitongMapCount: -10
     }
-  }, 
+  },
   updated() {
     if (!this.onlyButton && this.messages != undefined && this.messages.length > 4)
     {
