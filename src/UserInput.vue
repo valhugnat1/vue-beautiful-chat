@@ -55,9 +55,8 @@
             <icon-send />
           </user-input-button>
         </div>
-        <button v-if="mapSetting.exist && !showTypingIndicator" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
+        <button v-if="mapSetting.exist && calculNbRepBeforeFct() && !showTypingIndicator" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
           <img class="img-indicator-map" :src="'/api/assets/'+mapSetting.imgBaliseMenu" style="height: 50px;"/>
-          <!--  calculNbRepBeforeFct() && -->
         </button>
       </div>
     </form>
@@ -76,10 +75,8 @@ import store from "./store/"
 import IconCross from "./components/icons/IconCross.vue";
 import IconOk from "./components/icons/IconOk.vue";
 import IconSend from "./components/icons/IconSend.vue";
-import MapSelec from "./MapSelec.vue";
-import ZoomElem from "./ZoomElem.vue";
 import { length } from 'file-loader'
-
+import ZoomElem from "./ZoomElem.vue";
 
 export default {
   components: {
@@ -90,7 +87,6 @@ export default {
     IconCross,
     IconOk,
     IconSend,
-    MapSelec, 
     ZoomElem
   },
   props: {
@@ -185,12 +181,19 @@ export default {
       inputActive: false,
       store,
       mapShow: false,
-      loadMsgMapGood: false
+      loadMsgMapGood: false, 
+      waitongMapCount: -10
     }
   },
   updated() {
     if (!this.onlyButton && this.messages != undefined && this.messages.length > 4)
     {
+      if (this.waitongMapCount+2 == this.messages.length) {
+          this.waitongMapCount = -10;
+          this._submitSuggestion("ok") //Valide le message indiquand que la carte arrive 
+          this.mapShow = !this.mapShow // Affiche la carte
+      }
+      console.log("updated ", this.messages);
       if (this.messages.at(-3).data.text == "Voici la carte") {
         this.loadMsgMapGood = true
       } else {
@@ -214,11 +217,14 @@ export default {
       {
         this.mapShow = !this.mapShow // Cache la carte
       } else {
+        console.log("before !map ", this.messages);
         this._showIndicator('!map') // Envoi le message pour demander d'afficher la carte
-        setTimeout(() => {
+        console.log("after !map ", this.messages);
+        this.waitongMapCount = this.messages.length;
+        /* setTimeout(() => {
           this._submitSuggestion("ok") //Valide le message indiquand que la carte arrive 
           this.mapShow = !this.mapShow // Affiche la carte
-        },400);
+        },1500); */
       }
     },
     cancelFile () {
