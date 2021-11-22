@@ -217,7 +217,10 @@ export default Vue.extend({
       {
         this.translateXBeg = (this.mapSetting.sizeWidth/2-this.posiPixelUserX)*this.scale
         this.translateYBeg = (this.mapSetting.sizeHeight/2+this.posiPixelUserY)*this.scale
-      }       
+      } else {
+        this.$refs.positionUtilisateur.style.left = "-1000px"
+        this.$refs.positionUtilisateur.style.top = "-1000px"
+      }
     }, 2000);
   }
 })

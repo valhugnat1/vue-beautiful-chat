@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ZoomElem v-if="mapShow && mountedMapCheckMsg && !onlyButton" v-on:quiteMap="_quiteMap" v-on:sendSuggestion="_submitSuggestion" :mapSetting="mapSetting" :colors="colors" :suggestions="suggestions" :mapOpen="mapShow" />
+    <ZoomElem v-if="mapShow && !onlyButton" v-on:quiteMap="_quiteMap" v-on:sendSuggestion="_submitSuggestion" :mapSetting="mapSetting" :colors="colors" :suggestions="suggestions" :mapOpen="mapShow" />
     <Suggestions v-if="suggestions && onlyButton" :suggestions="suggestions" v-on:sendSuggestion="_submitSuggestion" :colors="colors" />
     <div v-if="file && onlyButton" class='file-container' :style="{backgroundColor: colors.userInput.text, color: colors.userInput.bg}" >
       <span class='icon-file-message'><img :src="icons.file.img"  :alt="icons.file.name" height="15" /></span>
@@ -189,16 +189,23 @@ export default {
     if (!this.onlyButton && this.messages != undefined && this.messages.length > 4)
     {
       if (this.waitongMapCount+2 == this.messages.length) {
-          this.waitongMapCount = -10;
+          //this.waitongMapCount = -10;
           this._submitSuggestion("ok") //Valide le message indiquand que la carte arrive 
-          this.mapShow = !this.mapShow // Affiche la carte
+          //this.mapShow = !this.mapShow // Affiche la carte
       }
+
+      if (this.waitongMapCount+4 == this.messages.length) {
+          this.waitongMapCount = -10;
+          this.mapShow = !this.mapShow // Affiche la carte
+          console.log("show ", this.messages);
+      }
+
       console.log("updated ", this.messages);
-      if (this.messages.at(-3).data.text == "Voici la carte") {
+      /* if (this.messages.at(-3).data.text == "Voici la carte") {
         this.loadMsgMapGood = true
       } else {
         this.loadMsgMapGood = false
-      }
+      } */
     }
   },
   methods: {
@@ -217,10 +224,10 @@ export default {
       {
         this.mapShow = !this.mapShow // Cache la carte
       } else {
-        console.log("before !map ", this.messages);
         this._showIndicator('!map') // Envoi le message pour demander d'afficher la carte
-        console.log("after !map ", this.messages);
         this.waitongMapCount = this.messages.length;
+
+
         /* setTimeout(() => {
           this._submitSuggestion("ok") //Valide le message indiquand que la carte arrive 
           this.mapShow = !this.mapShow // Affiche la carte
