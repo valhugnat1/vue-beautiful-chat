@@ -55,8 +55,9 @@
             <icon-send />
           </user-input-button>
         </div>
-        <button v-if="mapSetting.exist && calculNbRepBeforeFct() && !showTypingIndicator" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
+        <button v-if="mapSetting.exist && !showTypingIndicator" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
           <img class="img-indicator-map" :src="'/api/assets/'+mapSetting.imgBaliseMenu" style="height: 50px;"/>
+          <!--  calculNbRepBeforeFct() && -->
         </button>
       </div>
     </form>
@@ -188,7 +189,6 @@ export default {
     }
   },
   updated() {
-    console.log(this.mapSetting.exist, this.calculNbRepBeforeFct(), !this.showTypingIndicator);
     if (!this.onlyButton && this.messages != undefined && this.messages.length > 4)
     {
       if (this.messages.at(-3).data.text == "Voici la carte") {
