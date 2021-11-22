@@ -209,7 +209,7 @@ export default Vue.extend({
   },
   mounted() {
     this.scalingHandler()
-    this.checkPosi()
+    //this.checkPosi()
     setTimeout(() => {
       var posiPixelX = (this.mapSetting.sizeWidth/2-this.posiPixelUserX)*this.scale
       var posiPixelY = (this.mapSetting.sizeHeight/2+this.posiPixelUserY)*this.scale
