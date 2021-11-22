@@ -1,5 +1,5 @@
 <template>
-  <div> 
+  <div>
 
     <div @mousedown.stop.prevent="zoomCarte" class="buttonMap" id="buttonZoom"> 
       <img class="imgZoom" :src="'/api/assets/'+mapSetting.imgZoom" /> 

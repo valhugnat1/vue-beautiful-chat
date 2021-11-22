@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ZoomElem v-if="mapShow && loadMsgMapGood && !onlyButton" v-on:quiteMap="_quiteMap" v-on:sendSuggestion="_submitSuggestion" :mapSetting="mapSetting" :colors="colors" :suggestions="suggestions" :mapOpen="mapShow" />
+    <ZoomElem v-if="mapShow && mountedMapCheckMsg && !onlyButton" v-on:quiteMap="_quiteMap" v-on:sendSuggestion="_submitSuggestion" :mapSetting="mapSetting" :colors="colors" :suggestions="suggestions" :mapOpen="mapShow" />
     <Suggestions v-if="suggestions && onlyButton" :suggestions="suggestions" v-on:sendSuggestion="_submitSuggestion" :colors="colors" />
     <div v-if="file && onlyButton" class='file-container' :style="{backgroundColor: colors.userInput.text, color: colors.userInput.bg}" >
       <span class='icon-file-message'><img :src="icons.file.img"  :alt="icons.file.name" height="15" /></span>
@@ -366,7 +366,18 @@ export default {
         });
       }
       return this.mapSetting.nbMsgAvantAccesMap <= count 
-    }
+    }, 
+    mountedMapCheckMsg() {
+      if (!this.onlyButton && this.messages != undefined && this.messages.length > 4)
+      {
+        if (this.messages.at(-3).data.text == "Voici la carte") {
+          this.$forceUpdate();
+          return true
+        } else {
+          return false
+        }
+      }
+    },
   },
   mounted() {
     this.$root.$on('focusUserInput', () => {
