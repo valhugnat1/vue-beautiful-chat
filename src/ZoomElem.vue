@@ -1,11 +1,11 @@
 <template>
   <div>
 
-    <!-- <div @mousedown.stop.prevent="zoomCarte" class="buttonMap" id="buttonZoom"> 
+    <div @mousedown.stop.prevent="zoomCarte" class="buttonMap" id="buttonZoom" style="display : none;"> 
       <img class="imgZoom" :src="'/api/assets/'+mapSetting.imgZoom" /> 
     </div>
-    <div @mousedown.stop.prevent="dezoomCarte" class="buttonMap" id="buttonDezoom">
-      <img class="imgZoom" :src="'/api/assets/'+mapSetting.imgDezoom" > -->
+    <div @mousedown.stop.prevent="dezoomCarte" class="buttonMap" id="buttonDezoom" style="display : none;">
+      <img class="imgZoom" :src="'/api/assets/'+mapSetting.imgDezoom" > 
     </div>
     <div @mousedown.stop.prevent="quiteCarte" class="buttonMap" id="buttonQuite">
       <img class="imgZoom" :src="'/api/assets/'+mapSetting.imgCroix" >       
