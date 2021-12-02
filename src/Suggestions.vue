@@ -25,7 +25,7 @@
 
               <a :href="`tel:${suggestion.telephone}`" style="text-decoration: none;"><div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" 
               :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]"
-              v-on:click.stop.prevent="" v-if="suggestion.telephone !== undefined">☎️ {{suggestion.telephone}}</div></a>
+              v-if="suggestion.telephone !== undefined">☎️ {{suggestion.telephone}}</div></a>
 
               <div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]" 
               v-on:click.stop.prevent="buttonClick(suggestion.cliqueGeneral, suggestion.boutonSavoirPlus, suggestion.choice, 'special')" 
