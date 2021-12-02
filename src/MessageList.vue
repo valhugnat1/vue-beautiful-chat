@@ -45,6 +45,8 @@
       @edit="$emit('edit', $event)"
       :colors="colors"
       :mapSetting="mapSetting"
+      :imgUserInput="imgUserInput"
+      :device="device"
       :showInputText="showInputText"
       :onlyButton="true"
       :messages="messages" />
@@ -80,6 +82,14 @@ export default {
     mapSetting: {
       type: Object,
       required: true
+    },
+    imgUserInput : {
+      type: Object,
+      required: false
+    },
+    device : {
+      type: Object,
+      required: false
     },
     showInputText: {
       type: Boolean,
@@ -134,25 +144,26 @@ export default {
       default: 'Write a message...'
     },
   },
+  data () {
+    return {
+      scrollUser: false
+    }
+  },
   methods: {
     _scrollDown () {
       //this.$refs.scrollList.scrollTop = this.$refs.scrollList.scrollHeight // => Pour tjs avoir le scroll à fond
+     
       var nbMsg = 0 
       var nbMsg = this.$refs.scrollList.getElementsByClassName("message_me").length
-      if (nbMsg != 0 ) {
+
+      if (nbMsg != 0 && !this.scrollUser){ 
         this.$refs.scrollList.scrollTop = this.$refs.scrollList.getElementsByClassName("message_me")[nbMsg-1].offsetTop-65
-      }
-      
-      /*
-      setTimeout(() => {
-        this.$refs.scrollList.scrollTop = this.$refs.scrollList.scrollTop+20
-      }, 100);
-      */
+      } 
     },
     handleScroll (e) {
-        if (e.target.scrollTop === 0) {
-            this.$emit('scrollToTop')
-        }
+      if (e.target.scrollTop === 0) {
+          this.$emit('scrollToTop')
+      }
     },
     shouldScrollToBottom() {
       return this.alwaysScrollToBottom || (this.$refs.scrollList.scrollTop > this.$refs.scrollList.scrollHeight - 600)
@@ -174,8 +185,20 @@ export default {
   },
   mounted () {
     this.$nextTick(this._scrollDown())
+    this.$refs.scrollList.addEventListener('wheel',event => this.scrollUser = true );
   },
   updated () {
+    var nbMsg = this.$refs.scrollList.getElementsByClassName('sc-message').length
+
+    try {
+      if (this.$refs.scrollList.getElementsByClassName('sc-message')[nbMsg-2].classList[1] == "message_me"){
+        this.scrollUser = false 
+      }
+    } catch (error) {
+      this.scrollUser = false 
+    } 
+
+
     if (this.shouldScrollToBottom())
       this.$nextTick(this._scrollDown())
   }

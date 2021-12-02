@@ -127,7 +127,7 @@ export default {
     }
 
     function getDistance(position) {
-      console.log("position", position)
+      c//onsole.log("position", position)
       function calcCrow (lat1, lon1, lat2, lon2) {
         var R = 6371; // km
         var dLat = toRad(lat2-lat1);
@@ -144,9 +144,9 @@ export default {
       function toRad (Value) {
         return Value * Math.PI / 180;
       }
-      console.log("position", position.coords.latitude, position.coords.longitude)
+      //console.log("position", position.coords.latitude, position.coords.longitude)
 
-      console.log("self.suggestions", selfSuggestions, selfDistanceGoogle)
+      //console.log("self.suggestions", selfSuggestions, selfDistanceGoogle)
       var i = 0
       for (var suggestion in selfSuggestions) 
       {
@@ -159,7 +159,7 @@ export default {
         }
         i = i + 1
       }
-      console.log(selfDistanceGoogle)
+      //console.log(selfDistanceGoogle)
 
     }
 
@@ -170,7 +170,6 @@ export default {
     var selfSuggestions = []
     var selfDistanceGoogle = []
     setTimeout(() => {
-      console.log(this);
       selfSuggestions = this.suggestions
       selfDistanceGoogle = this.distanceGoogle
 

@@ -81,6 +81,8 @@
       @edit="$emit('edit', $event)"
       :colors="colors" 
       :mapSetting="mapSetting"
+      :imgUserInput="imgUserInput"
+      :device="device"
       :showInputText="showInputText"
       :onlyButton="false"
       :messages="messages"
@@ -181,6 +183,14 @@ export default {
     mapSetting : {
       type: Object,
       required: true
+    },
+    imgUserInput : {
+      type: Object,
+      required: false
+    },
+    device : {
+      type: Object,
+      required: false
     },
     showInputText : {
       type: Boolean,

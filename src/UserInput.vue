@@ -55,11 +55,93 @@
             <icon-send />
           </user-input-button>
         </div>
-        <button v-if="mapSetting.exist && calculNbRepBeforeFct() && !showTypingIndicator" v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
-          <img class="img-indicator-map" :src="'/api/assets/'+mapSetting.imgBaliseMenu" style="height: 50px;"/>
-        </button>
       </div>
     </form>
+
+
+    <div id="bottomButton" class="sc-user-input" :class="{active: inputActive}" :style="{background: colors.userInput.bg}" 
+    v-if="onlyButton == false && (this.imgUserInput.legale != '' || this.imgUserInput.contenuSpecial1 != '' || this.imgUserInput.contenuSpecial2 != '' || this.imgUserInput.contenuSpecial3 != '' || this.imgUserInput.menu != '' || this.imgUserInput.carte != '' )">
+      <div id="diplayButton">
+        <!-- LEGAL -->
+        <div v-if="imgUserInput.legale != '' && imgUserInput.legale != undefined">
+          <div class="cacheButtom"  v-if="showTypingIndicator">
+            <button v-on:click.prevent="_showIndicator('!legale');" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.legale" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+          <div v-else>
+            <button v-on:click.prevent="_showIndicator('!legale');" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.legale" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+        </div>
+        <!-- MENU -->
+        <div v-if="imgUserInput.menu != '' && imgUserInput.menu != undefined">
+          <div class="cacheButtom"  v-if="showTypingIndicator || menuNotPass()">
+            <button class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.menu" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+          <div v-else>
+            <button v-on:click.prevent="_showIndicator('!menu'); waitongMapCount = messages.length;" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.menu" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+        </div>
+        <!-- contenuSpecial1 -->
+        <div v-if="imgUserInput.contenuSpecial1 != '' && imgUserInput.contenuSpecial1 != undefined">
+          <div class="cacheButtom" v-if="showTypingIndicator || menuNotPass() || beginNotPass()">
+            <button class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial1" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+          <div v-else>
+            <button v-on:click.prevent="_showIndicator('!contenuSpecial1'); waitongMapCount = messages.length;" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial1" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+        </div>
+        <!-- contenuSpecial2 -->
+        <div v-if="imgUserInput.contenuSpecial2 != '' && imgUserInput.contenuSpecial2 != undefined">
+          <div class="cacheButtom" v-if="showTypingIndicator || menuNotPass() || beginNotPass()">
+            <button   class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial2" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+          <div v-else>
+            <button v-on:click.prevent="_showIndicator('!contenuSpecial2'); waitongMapCount = messages.length;" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial2" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+        </div>
+        <!-- contenuSpecial3 -->
+        <div v-if="imgUserInput.contenuSpecial3 != '' && imgUserInput.contenuSpecial3 != undefined">
+          <div class="cacheButtom" v-if="showTypingIndicator || menuNotPass() || beginNotPass()">
+            <button   class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial3" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+          <div v-else>
+            <button v-on:click.prevent="_showIndicator('!contenuSpecial3'); waitongMapCount = messages.length;" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial3" style="height: 50px; width: 50px;"/>
+            </button>
+          </div>
+        </div>
+        <!-- MAP -->
+        <div v-if="imgUserInput.carte != '' && imgUserInput.carte != undefined">
+          <div class="cacheButtom"  v-if="!(mapSetting.exist && calculNbRepBeforeFct() && !showTypingIndicator)">
+            <button class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
+              <img class="img-indicator-map" :src="imgUserInput.carte" style="height: 50px;"/>
+            </button>
+          </div>
+          <div v-else>
+            <button v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
+              <img class="img-indicator-map" :src="imgUserInput.carte" style="height: 50px;"/>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -158,6 +240,14 @@ export default {
       type: Object,
       required: true
     },
+    imgUserInput : {
+      type: Object,
+      required: false
+    },
+    device : {
+      type: Object,
+      required: false
+    },
     showInputText : {
       type: Boolean,
       required: true
@@ -182,23 +272,55 @@ export default {
       store,
       mapShow: false,
       loadMsgMapGood: false, 
-      waitongMapCount: -10
+      waitongMapCount: -10, 
+      msgSpe: ""
     }
   },
   updated() {
     if (!this.onlyButton && this.messages != undefined && this.messages.length > 4)
     {
+      console.log("imgUserInput", this.imgUserInput);
       if (this.waitongMapCount+2 == this.messages.length) {
           this._submitSuggestion("ok") //Valide le message indiquand que la carte arrive 
       }
 
-      if (this.waitongMapCount+4 == this.messages.length) {
+      if (this.waitongMapCount+4 == this.messages.length && this.msgSpe == "map") {
           this.waitongMapCount = -10;
           this.mapShow = !this.mapShow // Affiche la carte
+          this.msgSpe = ""
       }
     }
   },
   methods: {
+    menuNotPass () { // pour l'affichage de des bouttons dans la ligne du bas 
+      var menuPassLoop = false
+      var beginPass = false 
+      var end = false 
+      try {
+        this.device.surveys[0].questions.forEach(elem =>{
+          
+          if (elem.id == this.device.surveys[0].chat.beginDefaultMsgId) beginPass = true
+          if (elem.id == this.device.surveys[0].chat.menuId) menuPassLoop = true
+          if (beginPass == menuPassLoop && elem.id == this.device.question.id ) {end = true; return false;}
+        });
+      } catch (e) {
+        return true
+      }
+      if (!end) return true
+    },
+    beginNotPass () { // pour l'affichage de des bouttons dans la ligne du bas 
+      var beginPass = false 
+      var end = false 
+      try {
+        this.device.surveys[0].questions.forEach(elem =>{
+          if (elem.id == this.device.surveys[0].chat.beginDefaultMsgId) beginPass = true
+          if (beginPass  && elem.id == this.device.question.id ) {end = true; return false;}
+        });
+      } catch (e) {
+        return true
+      }
+      if (!end)  return true
+    },
     calculNbRepBeforeFct () {
       var count = 0;
       if (!this.onlyButton && this.messages.length > 1)
@@ -207,7 +329,12 @@ export default {
           if (element.author == "me") count = count + 1
         });
       }
-      return this.mapSetting.nbMsgAvantAccesMap <= count 
+      //return this.mapSetting.nbMsgAvantAccesMap <= count 
+      try {
+        return this.suggestions[0].baliseAcces
+      } catch (e) {
+        return false
+      }
     },
     modifStatutMap () {
       if (this.mapShow)
@@ -216,6 +343,7 @@ export default {
       } else {
         this._showIndicator('!map') // Envoi le message pour demander d'afficher la carte
         this.waitongMapCount = this.messages.length;
+        this.msgSpe = 'map'
       }
     },
     cancelFile () {
@@ -520,5 +648,34 @@ export default {
 
 .credit {
   font-size: 7px !important;
+}
+
+#extraCarrousel {
+  margin-right: 10px;
+}
+
+#bottomButton
+{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+#diplayButton
+{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  right: 0px;
+  justify-content: space-evenly;
+  display: flex;
+  border-top: 1px solid #00000036;
+  padding-top: 3px;
+}
+
+.cacheButtom
+{
+  background-color: white;
+  opacity: 0.3;
 }
 </style>

@@ -31,6 +31,8 @@
       :showTypingIndicator="showTypingIndicator"
       :colors="colors"
       :mapSetting="mapSetting"
+      :imgUserInput="imgUserInput"
+      :device="device"
       :showInputText="showInputText"
       :alwaysScrollToBottom="alwaysScrollToBottom"
       :messageStyling="messageStyling"
@@ -182,6 +184,14 @@ export default {
     mapSetting: {
       type: Object,
       required: true
+    },
+    imgUserInput : {
+      type: Object,
+      required: false
+    },
+    device : {
+      type: Object,
+      required: false
     },
     showInputText:{
       type: Boolean,
