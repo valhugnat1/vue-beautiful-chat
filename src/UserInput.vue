@@ -66,12 +66,12 @@
         <div v-if="imgUserInput.legale != '' && imgUserInput.legale != undefined">
           <div class="cacheButtom"  v-if="showTypingIndicator">
             <button v-on:click.prevent="_showIndicator('!legale');" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.legale" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.legale" style="height: 45px; width: 100%;"/>
             </button>
           </div>
           <div v-else>
             <button v-on:click.prevent="_showIndicator('!legale');" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.legale" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.legale" style="height: 45px; width: 100%;"/>
             </button>
           </div>
         </div>
@@ -79,12 +79,12 @@
         <div v-if="imgUserInput.menu != '' && imgUserInput.menu != undefined">
           <div class="cacheButtom"  v-if="showTypingIndicator || menuNotPass()">
             <button class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.menu" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.menu" style="height: 45px; width: 100%;"/>
             </button>
           </div>
           <div v-else>
             <button v-on:click.prevent="_showIndicator('!menu'); waitongMapCount = messages.length;" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.menu" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.menu" style="height: 45px; width: 100%;"/>
             </button>
           </div>
         </div>
@@ -92,12 +92,12 @@
         <div v-if="imgUserInput.contenuSpecial1 != '' && imgUserInput.contenuSpecial1 != undefined">
           <div class="cacheButtom" v-if="showTypingIndicator || menuNotPass() || beginNotPass()">
             <button class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial1" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial1" style="height: 45px; width: 100%;"/>
             </button>
           </div>
           <div v-else>
             <button v-on:click.prevent="_showIndicator('!contenuSpecial1'); waitongMapCount = messages.length;" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial1" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial1" style="height: 45px; width: 100%;"/>
             </button>
           </div>
         </div>
@@ -105,12 +105,12 @@
         <div v-if="imgUserInput.contenuSpecial2 != '' && imgUserInput.contenuSpecial2 != undefined">
           <div class="cacheButtom" v-if="showTypingIndicator || menuNotPass() || beginNotPass()">
             <button   class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial2" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial2" style="height: 45px; width: 100%;"/>
             </button>
           </div>
           <div v-else>
             <button v-on:click.prevent="_showIndicator('!contenuSpecial2'); waitongMapCount = messages.length;" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial2" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial2" style="height: 45px; width: 100%;"/>
             </button>
           </div>
         </div>
@@ -118,12 +118,12 @@
         <div v-if="imgUserInput.contenuSpecial3 != '' && imgUserInput.contenuSpecial3 != undefined">
           <div class="cacheButtom" v-if="showTypingIndicator || menuNotPass() || beginNotPass()">
             <button   class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial3" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial3" style="height: 45px; width: 100%;"/>
             </button>
           </div>
           <div v-else>
             <button v-on:click.prevent="_showIndicator('!contenuSpecial3'); waitongMapCount = messages.length;" class="sc-user-input--button-icon-wrapper" id="extraCarrousel" >
-              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial3" style="height: 50px; width: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.contenuSpecial3" style="height: 45px; width: 100%;"/>
             </button>
           </div>
         </div>
@@ -131,12 +131,12 @@
         <div v-if="imgUserInput.carte != '' && imgUserInput.carte != undefined">
           <div class="cacheButtom"  v-if="!(mapSetting.exist && calculNbRepBeforeFct() && !showTypingIndicator)">
             <button class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
-              <img class="img-indicator-map" :src="imgUserInput.carte" style="height: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.carte" style="height: 45px;"/>
             </button>
           </div>
           <div v-else>
             <button v-on:click.prevent="modifStatutMap()" class="sc-user-input--button-icon-wrapper" id="showMap" tooltip="Map">
-              <img class="img-indicator-map" :src="imgUserInput.carte" style="height: 50px;"/>
+              <img class="img-indicator-map" :src="imgUserInput.carte" style="height: 45px;"/>
             </button>
           </div>
         </div>
