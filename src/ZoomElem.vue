@@ -10,8 +10,13 @@
     <div @mousedown.stop.prevent="quiteCarte" class="buttonMap" id="buttonQuite">
       <img class="imgZoom" :src="'/api/assets/'+mapSetting.imgCroix" >       
     </div>
+    
+    <p class="loadMsg" ref="txtLoad">Chargement de la carte ...</p>
 
     <div @touchstart="touchClic" ref="cadreZoom" id="zoomConteneur" :style="{'left':(widthWindow-mapSetting.sizeWidth)/2+'px', 'top':(heightWindow+115-mapSetting.sizeHeight)/2+'px', 'background': 'white'}"> <!--style="top:-430px; left:-1000px;"-->
+      
+       
+      
       <PinchScrollZoom
         ref="zoomer"
         :width="mapSetting.sizeWidth"
@@ -27,7 +32,8 @@
         :translate-x="translateXBeg"
         :translate-y="translateYBeg">
 
-        <img :src="'/api/assets/'+mapSetting.imgMap" :width="mapSetting.sizeWidth" :height="mapSetting.sizeHeight"/>
+        <!-- <img :src="'/api/assets/'+mapSetting.imgMap" :width="mapSetting.sizeWidth" :height="mapSetting.sizeHeight"/> -->
+        <img :src="'https://studio.artybot.fr/api/assets/lovebot_marais/Plan_vierge_def.svg'" @load="loadTxtHide" :width="mapSetting.sizeWidth" ref='imgPrin' :height="mapSetting.sizeHeight"/> 
 
         <img id="positionUtilisateur" class="baliseUtili" ref="positionUtilisateur" :src="'/api/assets/'+mapSetting.imgBaliseUtili" 
         :style="{'top':-60-mapSetting.sizeHeight+'px', 'left':'0px', 'position': 'relative', 'witdh' : mapSetting.tailleUtili+'px'}"> 
@@ -122,7 +128,7 @@ export default Vue.extend({
 
       var xClient = (p.clientX-im.x)/this.$refs.zoomer.currentScale
       var yClient = (p.clientY-im.y)/this.$refs.zoomer.currentScale
-      var sensibilitClicPosi = 200
+      var sensibilitClicPosi = 50
 
       this.suggestions.forEach((item) =>{
         if (item.localisationX-sensibilitClicPosi < xClient && item.localisationX+sensibilitClicPosi > xClient && 
@@ -205,6 +211,10 @@ export default Vue.extend({
             x: Math.round(this.mapSetting.sizeWidth * (long - coinHautGauche.long) / (coinBasDroit.long - coinHautGauche.long)),
             y: Math.round(this.mapSetting.sizeHeight * (lat - coinHautGauche.lat) / (coinBasDroit.lat - coinHautGauche.lat))
         };
+    },
+    loadTxtHide : function () {
+      console.log("LOAD !!");
+      this.$refs.txtLoad.style.cssText = 'display:none;';
     }
   },
   mounted() {
@@ -260,5 +270,15 @@ export default Vue.extend({
 
 .imgZoom{
   width: 40px;
+}
+
+.loadMsg{
+    position: absolute;
+    top: 40%;
+    left: 23%;
+    z-index: 1;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
 }
 </style>

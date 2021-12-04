@@ -132,7 +132,7 @@ export default {
 @media (max-width: 450px) {
   .sc-header {
     border-radius: 0px;
-    z-index: 1;
+    z-index: 3;
   }
 }
 </style>

@@ -678,4 +678,6 @@ export default {
   background-color: white;
   opacity: 0.3;
 }
+
+
 </style>
