@@ -31,6 +31,10 @@
               v-on:click.stop.prevent="buttonClick(suggestion.cliqueGeneral, suggestion.boutonSavoirPlus, suggestion.choice, 'special')" 
               v-if="suggestion.boutonSavoirPlus">A savoir plus ➕</div>
 
+              <div style="padding : 0.5em; text-align: center; border: 1px solid #dedede; font-size: 16px;" 
+              :style="[ colors.carrousel !== undefined ? {color : colors.carrousel.title} : {'color': '#295ca3'}]" v-on:click.stop.prevent="getlinkExtern(suggestion.siteWeb)" 
+              v-if="suggestion.siteWeb !== undefined">Site Web</div> 
+
             </button>
           </splide-slide>
         </splide>
@@ -127,7 +131,7 @@ export default {
     }
 
     function getDistance(position) {
-      c//onsole.log("position", position)
+      
       function calcCrow (lat1, lon1, lat2, lon2) {
         var R = 6371; // km
         var dLat = toRad(lat2-lat1);
@@ -144,13 +148,10 @@ export default {
       function toRad (Value) {
         return Value * Math.PI / 180;
       }
-      //console.log("position", position.coords.latitude, position.coords.longitude)
-
-      //console.log("self.suggestions", selfSuggestions, selfDistanceGoogle)
+      
       var i = 0
       for (var suggestion in selfSuggestions) 
       {
-        console.log(i, selfSuggestions[i])
         if (selfSuggestions[i].latitude !== undefined)
         {
           selfDistanceGoogle.push("📍 " + calcCrow(position.coords.latitude, position.coords.longitude, selfSuggestions[i].latitude, selfSuggestions[i].longitude) + " km")
@@ -159,7 +160,6 @@ export default {
         }
         i = i + 1
       }
-      //console.log(selfDistanceGoogle)
 
     }
 
@@ -240,7 +240,7 @@ export default {
     },
     getlinkExtern : function (suggestion) {
 
-      window.open(suggestion.boutonSavoirPlus, '_blank');
+      window.open(suggestion, '_blank');
     }
   }, create() {
     if (typeof this.colors.carrousel !== 'undefined') {
@@ -265,12 +265,12 @@ export default {
 .sc-suggestions-element {
   margin: 3px;
   padding: 5px 10px 5px 10px;
-  border: 1px solid;
   border-radius: 15px;
   font-size: 14px;
   background: white;
-  cursor: pointer;
-  border-color: white !important;
+  cursor: pointer;    
+  box-shadow: -2px 3px rgb(247 198 197 / 80%);
+  border: #295ca3 2px solid;
   color : #295ca3;
 
 }
